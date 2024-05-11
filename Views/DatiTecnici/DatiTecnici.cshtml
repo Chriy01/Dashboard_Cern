@@ -1,0 +1,542 @@
+﻿@{
+    ViewData["Title"] = "DatiTecnici";
+}
+<link href="../../dist/css/style.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../assets/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css">
+<link rel="stylesheet" type="text/css" href="../assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-md-5 align-self-center">
+                <h3 class="page-title">Dashboard</h3>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Simulazione</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Dati Generali</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <!-- Row -->
+        <div class="card">
+            <div class="card-body collapse show">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="inflazione">Longitudine</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="Longitudine" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">°</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="inflazione">Latitudine</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="Latitudine" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">°</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inflazione">Potenza dell’impianto</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="Potenza_impianto" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">kW</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div style="align-content: center" class="col-4">
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" onchange="ShowRinnovabile()" class="custom-control-input" id="customCheck1">
+                                <label class="custom-control-label" for="customCheck1">Abilita Quota Potenza Rinnovabile</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="div_rinnovabile" class="col-4">
+                        <label for="inflazione">Quota di potenza rinnovabile</label>
+                        <div class="input-group mb-3">
+                            <input type="number" id="Potenza_rinnovabile" class="form-control" value="0">
+                            <div class="input-group-append">
+                                <span class="input-group-text">kW</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Area Impianto</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="Area_Impianto" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">m²</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">
+                                Tipologia di Impianto
+                            </label>
+                            <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Impianto">
+                                <option value="">Seleziona</option>
+                                <option value="1">Fisso</option>
+                                <option value="2">Inseguimento a doppio asse</option>
+                                <option value="3">Asse verticale</option>
+                                <option value="3">Asse inclinato</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Data di entrata in esercizio</label>
+                            <div class="input-group mb-3">
+                                <input type="date" id="potenza_inverter" class="form-control pickadate " value="0">
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div style="align-content: center" class="col-3">
+                        <div onchange="ShowSezione2()" class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck2">
+                            <label class="custom-control-label" for="customCheck2">Abilita Seconda Falda</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inflazione">Potenza sezione</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="Potenza_sezione1" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">kW</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inflazione">Angolo di tilt (min 0°, max 90°)</label>
+                            <div class="input-group mb-3">
+                                <input type="number" max="90" min="0" id="angolo_di_tilt1" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">°</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inflazione">Angolo di azimut (min -180°, max 180°)</label>
+                            <div class="input-group mb-3">
+                                <input type="number" max="180" min="-180" id="angolo_di_azimut1" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">°</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="sezione2" class="row mt-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inflazione">Potenza sezione 2</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="Potenza_sezione2" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">kW</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inflazione">Angolo di tilt 2 (min 0°, max 90°)</label>
+                            <div class="input-group mb-3">
+                                <input type="number" max="90" min="0" id="angolo_di_tilt2" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">°</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="inflazione">Angolo di azimut 2 (min -180°, max 180°)</label>
+                            <div class="input-group mb-3">
+                                <input type="number" max="180" min="-180" id="angolo_di_azimut2" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">°</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Efficienza del pannello</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="efficienzapannello" class="form-control" value="0">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Coefficiente di temperatura </label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="coef_temp" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%/K</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">NOCT</label>
+                            <div class="input-group mb-3">
+                                <input type="number"  id="noct" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">°C</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Fattore di riduzione annuo delle prestazioni</label>
+                            <div class="input-group mb-3">
+                                <input type="number"  id="prestazioni" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Efficienza inverter</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="efficienzainverter" class="form-control" value="0">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Potenza inverter</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="potenza_inverter" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">kW</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Capacità batteria</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="capacita_batteria" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">kWh</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Costo ricambio batteria</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="costo" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Altre Perdite</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="perdite" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-3" style="align-content:center">
+           
+                        <div class=" ml-5 bootstrap-switch-mini bootstrap-switch bootstrap-switch-wrapper bootstrap-switch-animate bootstrap-switch-on" style="width: fit-content;">
+                            <div class="bootstrap-switch-container" style="width: fit-content; margin-left: 0px;">
+                                <input onchange="SwitchCosto()" checked data-size="normal" data-on-text="Costo al kW" data-off-text="Costo Totale" type="checkbox" id="mod">
+                            </div>
+                 
+                        </div>
+
+                    </div>
+                    <div id="divCostokW" class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Costo al kW dell'impianto</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="costokw" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€/kW</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="divCostoTot" class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">Costo totale dell'impianto</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="costotot" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="checkTariffa">
+                                <label class="custom-control-label" for="checkTariffa">Impianto escluso da tariffa premio</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <button style="float: right;" class="btn btn-success" onclick="sendSelectedGenerali()" id="btn_start"><i class="mdi mdi-play-circle"></i> Continua</button>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Container fluid  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <footer class="footer">
+        © 2024
+    </footer>
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../../dist/js/app-style-switcher.js"></script>
+    <script src="../assets/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+    <script>
+        var rinnovabile = 0;
+        var sezione2 = 0;
+        var costoTot = 0;
+        $("#mod").bootstrapSwitch();
+
+        $(document).ready(function () {
+            $('#div_rinnovabile').hide();
+            $('#sezione2').hide();
+            $('#divCostoTot').hide();
+        });
+
+        function ShowRinnovabile() {
+
+            if ($('#customCheck1').is(':checked') == false) {
+                rinnovabile = 0;
+                $('#div_rinnovabile').hide();
+            } else {
+                rinnovabile = 1;
+                $('#div_rinnovabile').show();
+            }
+
+            
+        }
+        function ShowSezione2() {
+
+            if ($('#customCheck2').is(':checked') == false) {
+                sezione2 = 0;
+                $('#sezione2').hide();
+            } else {
+                sezione2 = 1;
+                $('#sezione2').show();
+            }
+
+
+        }
+
+        function SwitchCosto() {
+
+            if ($('#mod').is(':checked') == false) {
+                costoTot = 0;
+                $('#divCostoTot').hide();
+                $('#divCostokW').show();
+            } else {
+                costoTot = 1;
+                $('#divCostoTot').show();
+                $('#divCostokW').hide();
+            }
+
+
+        }
+
+
+
+        function sendSelectedGenerali() {
+            var ZonaMercato = document.getElementById("ZonaMercato").value;
+
+            if ($('#customCheck1').is(':checked') == true) {
+                Tipo_Conf = 0;
+            } else {
+                Tipo_Conf = 1;
+            }
+            var formData = {
+                ZonaMercato: ZonaMercato,
+                Tipo_Conf: Tipo_Conf,
+                Inflazione: $('#Inflazione').val(),
+                Interesse: $('#Interesse').val(),
+                ZonaGeo: $('#ZonaGeo').val(),
+                Anno: $('#datepicker').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: 'DatiGenerali/SaveDatiGenerali',
+                data: formData,
+                success: function (data) {
+                    window.location.href = '/DatiUtenze';
+                },
+                error: function () {
+
+                    // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
+                }
+            });
+        }
+    </script>
+
+
+
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- apps -->
+    <script src="../dist/js/app.min.js"></script>
+    <script src="../dist/js/app.init.horizontal.js"></script>
+    <script src="../dist/js/app-style-switcher.horizontal.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <!--Wave Effects -->
+    <script src="../dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="../dist/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="../dist/js/feather.min.js"></script>
+    <script src="../dist/js/custom.min.js"></script>
+    <!-- ############################################################### -->
+    <!-- This Page Js Files Here -->
+    <!-- ############################################################### -->
+    <!--c3 charts -->
+    <script src="../assets/libs/d3/dist/d3.min.js"></script>
+    <script src="../assets/libs/c3/c3.min.js"></script>
+
+    <script src="../assets/libs/moment/moment.js"></script>
+    <script src="../assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        // Date Picker
+        jQuery('.mydatepicker, #datepicker, .input-group.date').datepicker(
+            {
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years"
+            }
+        );
+        jQuery('#datepicker-autoclose').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+        jQuery('#date-range').datepicker({
+            toggleActive: true
+        });
+        jQuery('#datepicker-inline').datepicker({
+            todayHighlight: true
+        });
+    </script>
+
+    <!-- My Js File-->
+    <!-- <script src="../dist/js/DashboardJs/dashboard.js"></script> -->
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>

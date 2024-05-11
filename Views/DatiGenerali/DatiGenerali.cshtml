@@ -1,0 +1,508 @@
+﻿
+@{
+    ViewData["Title"] = "DatiGenerali";
+}
+
+<link rel="stylesheet" type="text/css" href="../dist/css/View_css/DatiGenerali.css">
+<link rel="stylesheet" type="text/css" href="../assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-md-5 align-self-center">
+                <h3 class="page-title">Dashboard</h3>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Simulazione</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Dati Generali</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <style>
+
+    </style>
+    <div class="container-fluid">
+        
+        <h3 class="card-title">Dati economici di riferimento (in tabella dati generali)</h3>
+        <!-- Row -->
+        <div class="card">
+            <div class="card-body collapse show">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group" id="div_nome_com">
+                            <label class="" for="inflazione">Nome comunità energetica</label>
+                            <div class="form-group">
+                                <input type="text" class=" mt-1 form-control" id="nome_com" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-3" >
+                        <div class="form-group" id="referal_year">
+                            <label class="" for="inflazione">Anno di riferimento</label>
+                            <div class="form-group">
+                                <input type="text" class=" mt-1 form-control mydatepicker" id="datepicker" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="" for="">Valori del mercato elettrico</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                <label class="" for="">Anno di riferimento</label>
+                            </div>
+                            <div class=" ml-3 col-2">
+                                <label class="switch">
+                                    <input id="check_mercato" onchange="SwitchCosto()" type="checkbox">
+                                    <span class="slider round" style="width: auto;height: auto;"></span>
+                                </label>
+                            </div>
+                            <div class="col-2">
+                                <label class="" for="">Personalizzato</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-3" id="parameters_col" style="align-content: center;">
+                        <div class="form-group">
+                            <button style="float: left;" class="btn btn-info" id="btn_parameters" onclick="$('#centermodal').modal()"><i class="mdi mdi-play-plus"></i>Inserisci i Parametri</button>
+
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h4 class="card-title">Zona di mercato</h4>
+                        <select class="select2 form-control custom-select select2-hidden-accessible" id="ZonaMercato">
+                            <option value="">Seleziona</option>
+                            <option value="CNOR">CNOR Centro Nord</option>
+                            <option value="CSUD">CSUD Centro Sud</option>
+                            <option value="NORD">NORD Nord</option>
+                            <option value="SARD">SARD Sardegna</option>
+                            <option value="SICI">SICI Sicilia</option>
+                            <option value="SUD">SUD Sud Italia</option>
+                            <option value="CALA">CALA Calabria</option>
+
+                        </select>
+
+                    </div>
+                    <div class="col-4">
+                     
+                        <h4 class="card-title">Tipologia di configurazione</h4>
+                        <div class="form-check form-check-inline">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="customControlValidation2" name="radio-stacked">
+                                <label class="custom-control-label" for="customControlValidation2">Comunità energetica</label>
+                            </div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="customControlValidation3" name="radio-stacked">
+                                <label class="custom-control-label" for="customControlValidation3">Autoconsumo collettivo</label>
+                            </div>
+                        </div>
+                     
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label  for="inflazione">Tasso di inflazione del mercato</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="Inflazione" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label " for="inflazione">Tasso di interesse del mercato</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="Interesse" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="inflazione">
+                                Zona geografica in Italia
+                            </label>
+                            <select class="select2 form-control custom-select select2-hidden-accessible" id="ZonaGeo">
+                                <option value="">Seleziona</option>
+                                <option value="NORD">Nord</option>
+                                <option value="CEN">Centro</option>
+                                <option value="SUD">Sud</option>                              
+                            </select>
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+                <button style="float: right;" class="btn btn-success" onclick="sendSelectedGenerali()" id="btn_start"><i class="mdi mdi-play-circle"></i> Continua</button>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="centermodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h4 class="modal-title" id="myCenterModalLabel">Seleziona la tipologia di utente</h4>
+                    <button type="button" class="close ml-auto" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="" for="">Annuale</label>
+                        </div>
+                        <div class=" ml-3 col-2">
+                            <label class="switch2">
+                                <input id="check_parametri" onchange="SwitchParametri()" type="checkbox">
+                                <span class="slider2 round2" style="width: auto;height: auto;"></span>
+                            </label>
+                        </div>
+                        <div class="col-2">
+                            <label class="" for="">Mensile</label>
+                        </div>
+
+                    </div>
+
+                    <div class="row" id="parametri_annuali">
+                        <div class="col-5">
+                            <label class="" for="">PUN Annuale</label>
+                        </div>
+                        <div class="col-8">
+                            <div class="input-group mb-3">
+                                <input type="number" id="pun_annuale" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€/kWh</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div id="insert_month">
+
+                        <div class="row">
+                            <div class="col-3">
+                                <label for="Consumo_Genn">Gennaio</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Genn" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Feb">Febbraio</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Feb" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Marzo">Marzo</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Marzo" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Apr">Aprile</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Apr" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label for="Consumo_Maggio">Maggio</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Maggio" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Giu">Giugno</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Giu" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Lug">Luglio</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Lug" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Ago">Agosto</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Ago" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label for="Consumo_Set">Settembre</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Set" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Ott">Ottobre</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Ott" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Nov">Novembre</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Nov" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Dic">Dicembre</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Dic" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="PUN_F1">Variazione PUN F1</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="PUN_F1" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€/kWh</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="Consumo_Giu">Variazione PUN F2</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="PUN_F2" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€/kWh</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="Consumo_Lug">Variazione PUN F3</label>
+                            <div class="input-group mb-3">
+                                <input type="number" id="PUN_F3" class="form-control" value="0">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€/kWh</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" onclick="sendMonthsValue()"><i class="mdi"></i>Salva</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+
+    <!-- ============================================================== -->
+    <!-- End Container fluid  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <footer class="footer">
+        © 2024
+    </footer>
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+
+    <script>
+        function SwitchCosto() {
+            if ($('#check_mercato').is(":checked")) {
+                $('#referal_year').hide();
+                $('#parameters_col').show();
+            }else{
+                $('#referal_year').show();
+                $('#parameters_col').hide();
+            }
+        }
+
+        function SwitchParametri() {
+            if ($('#check_parametri').is(":checked")) {
+                $('#insert_month').show();
+                $('#parametri_annuali').hide();
+            } else {
+                
+
+                $('#insert_month').hide();
+                $('#parametri_annuali').show();
+            }
+        }
+
+
+
+        function sendSelectedGenerali() {
+            var ZonaMercato = document.getElementById("ZonaMercato").value;
+            var Tipo_Conf;
+            if ($('#customControlValidation2').is(':checked') == true) {
+                Tipo_Conf = 0;
+            } else {
+                Tipo_Conf = 1;
+            }
+            var formData = {
+                ZonaMercato: ZonaMercato,
+                Tipo_Conf: Tipo_Conf,
+                Inflazione: $('#Inflazione').val(),
+                Interesse: $('#Interesse').val(),
+                ZonaGeo: $('#ZonaGeo').val(),
+                Anno: $('#datepicker').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: 'DatiGenerali/SaveDatiGenerali',
+                data: formData,
+                success: function (data) {
+                    window.location.href = '/DatiUtenze';
+                },
+                error: function () {
+      
+                    // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            $('#parameters_col').hide();
+            $('#insert_month').hide();
+        })
+    </script>
+
+
+
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- apps -->
+    <script src="../dist/js/app.min.js"></script>
+    <script src="../dist/js/app.init.horizontal.js"></script>
+    <script src="../dist/js/app-style-switcher.horizontal.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <!--Wave Effects -->
+    <script src="../dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="../dist/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="../dist/js/feather.min.js"></script>
+    <script src="../dist/js/custom.min.js"></script>
+    <!-- ############################################################### -->
+    <!-- This Page Js Files Here -->
+    <!-- ############################################################### -->
+    <!--c3 charts -->
+    <script src="../assets/libs/d3/dist/d3.min.js"></script>
+    <script src="../assets/libs/c3/c3.min.js"></script>
+
+    <script src="../assets/libs/moment/moment.js"></script>
+    <script src="../assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        // Date Picker
+        jQuery('.mydatepicker, #datepicker, .input-group.date').datepicker(
+            {
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years"
+            }
+        );
+        jQuery('#datepicker-autoclose').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+        jQuery('#date-range').datepicker({
+            toggleActive: true
+        });
+        jQuery('#datepicker-inline').datepicker({
+            todayHighlight: true
+        });
+    </script>
+
+    <!-- My Js File-->
+    <!-- <script src="../dist/js/DashboardJs/dashboard.js"></script> -->
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>

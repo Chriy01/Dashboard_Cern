@@ -1,0 +1,615 @@
+﻿@{
+    ViewData["Title"] = "DatiUtenze";
+}
+<link href="../assets/libs/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+<link href="../assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-md-5 align-self-center">
+                <h3 class="page-title">Dashboard</h3>
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Simulazione</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Dati Utenze</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+                <a href="#home" data-toggle="tab" aria-expanded="false" class="nav-link">
+                    <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
+                    <span class="d-none d-lg-block">Home</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#profile" data-toggle="tab" aria-expanded="true"
+                   class="nav-link active">
+                    <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
+                    <span class="d-none d-lg-block">Profile</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link">
+                    <i class="mdi mdi-settings-outline d-lg-none d-block mr-1"></i>
+                    <span class="d-none d-lg-block">Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane show active" id="home">
+                <div class="card">
+                    <div class="card-body collapse show">
+                        <div class="row" style="visibility:hidden" id="Input_Consumer">
+                            <div class="col-4">
+                                <h4 class="card-title">Forma dell'Utenza</h4>
+                                <select class="select2 form-control custom-select select2-hidden-accessible" id="Forma_Utenza">
+                                    <option value="">Seleziona</option>
+                                    <option value="pr">Privato</option>
+                                    <option value="az">Azienda</option>
+                                    <option value="pub">Pubblico</option>
+
+                                </select>
+
+                            </div>
+                            <div class="col-4">
+
+                                <h4 class="card-title">Tipologia di Utenza</h4>
+
+                                <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Utenza">
+                                    <option value="">Seleziona</option>
+                                    <option value="1">Residenziale</option>
+                                    <option value="2">Utenze condominiali</option>
+                                    <option value="3">Supermercato / alimentari</option>
+                                    <option value="4">Industria generica</option>
+                                    <option value="5">Ufficio</option>
+                                    <option value="6">Colonnine di ricarica</option>
+                                    <option value="99">Altro</option>
+                                </select>
+                            </div>
+
+                            <div class="col-4" id="col_cluster">
+
+                                <h4 class="card-title">N° utenze nel cluster</h4>
+                                <input type="number" id="n_utenze" class="form-control" value="1">
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="inflazione">Modalità di inserimento dati di consumi</label>
+
+                                        <select onchange="ShowCol()" class="select2 form-control custom-select select2-hidden-accessible" id="modalita_inserimento">
+                                            <option value="">Seleziona</option>
+                                            <option value="1">Consumo Annuale</option>
+                                            <option value="2">Consumo Mensile</option>
+                                            <option value="3">Curva Oraria</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-3" id="div_annuale">
+                                    <div class="form-group">
+                                        <label " for="inflazione">Tasso di interesse del mercato</label>
+                                        <div class="input-group mb-3">
+                                            <input type="number" id="Consumo_Annuale" class="form-control" value="0">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">kWh</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-3" style="align-content: end" id="div_mensile">
+                                    <div class="form-group">
+
+                                        <button class="btn btn-success" onclick="ShowModal()" id="btn_mese"><i class="mdi mdi-table-add"></i>Inserisci Valori Mensili</button>
+
+                                    </div>
+                                </div>
+                                <div class="col-3" style="align-content: end" id="div_orario">
+                                    <div class="form-group">
+                                        <button style="float: right;" class="btn btn-success" onclick="ShowModal()" id="btn_start"><i class="mdi mdi-play-circle"></i> Scarica Template</button>
+                                        <button style="float: right;" class="btn btn-success" onclick="ShowModal()" id="btn_start"><i class="mdi mdi-play-circle"></i> Carica</button>
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                            <button style="float: right;" class="btn btn-success" onclick="sendSelectedUtenze()" id="btn_start"><i class="mdi mdi-play-circle"></i> Continua</button>
+                        </div>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table id="grd_Consumer" class="table table-striped table-bordered no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Forma dell'Utenza</th>
+                                            <th>Numero di Utenze</th>
+                                            <th>Modalita Inserimento</th>                                            
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tiger Nixon</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>2011/04/25</td>                                            
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            </div>
+
+                        
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="profile">
+                <p>
+                    Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim
+                    justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis
+                    eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum
+                    semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor
+                    eu, consequat vitae, eleifend ac, enim.
+                </p>
+                <p class="mb-0">
+                    Food truck quinoa dolor sit amet, consectetuer adipiscing elit.
+                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+                    et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+                    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
+                    quis enim.
+                </p>
+            </div>
+            <div class="tab-pane" id="settings">
+                <p>
+                    Food truck quinoa dolor sit amet, consectetuer adipiscing elit. Aenean
+                    commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et
+                    magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+                    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
+                    quis enim.
+                </p>
+                <p class="mb-0">
+                    Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
+                    arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam
+                    dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus
+                    elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
+                    porttitor eu, consequat vitae, eleifend ac, enim.
+                </p>
+            </div>
+        </div>
+
+
+        <!-- Row -->
+
+
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="centermodal" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myCenterModalLabel">Seleziona la tipologia di utente</h4>
+                        <button type="button" class="close ml-auto" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-3">
+                                <label for="Consumo_Genn">Gennaio</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Genn" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Feb">Febbraio</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Feb" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Marzo">Marzo</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Marzo" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Apr">Aprile</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Apr" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label for="Consumo_Maggio">Maggio</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Maggio" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Giu">Giugno</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Giu" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Lug">Luglio</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Lug" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Ago">Agosto</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Ago" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label for="Consumo_Set">Settembre</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Set" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Ott">Ottobre</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Ott" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Nov">Novembre</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Nov" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="Consumo_Dic">Dicembre</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" id="Consumo_Dic" class="form-control" value="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">kWh</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" onclick="sendMonthsValue()"><i class="mdi"></i>Avanti</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Container fluid  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <footer class="footer">
+        © 2024
+    </footer>
+    <!-- ============================================================== -->
+    <script src="../src/assets/libs/moment/moment.js"></script>
+    <script src="../src/assets/libs/daterangepicker/daterangepicker.js"></script>
+
+    <script src="../src/assets/libs/sweetalert2/dist/sweetalert2.all.js"></script>
+
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../src/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../src/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- apps -->
+    <script src="../dist/js/app.min.js"></script>
+    <script src="../dist/js/app.init.js"></script>
+    <script src="../dist/js/app-style-switcher.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="../src/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../src/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <!--Wave Effects -->
+    <script src="../dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="../dist/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="../dist/js/feather.min.js"></script>
+    <script src="../dist/js/custom.min.js"></script>
+    <script src="../src/assets/libs/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="../src/assets/extra-libs/toastr/dist/build/toastr.min.js"></script>
+    <script src="../dist/js/pages/datatable/custom-datatable.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.js"> </script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.js"></script> <!--btn btn-info mb-3 -->
+    <script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/custom-data-source/dom-checkbox.js"></script>
+    <script src="../src/assets/libs/sweetalert2/dist/sweetalert2.all.js"></script>
+    <script src="../src/assets/extra-libs/prism/prism.js"></script>
+    <script src="../src/assets/libs/moment/moment.js"></script>
+    <script src="../src/assets/libs/daterangepicker/daterangepicker.js"></script>
+    <script src="../src/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+
+
+
+    <script>
+        var url = "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Italian.json";
+        $(document).ready(function () {
+
+            $('#div_annuale').hide();
+            $('#div_mensile').hide();
+            $('#div_orario').hide();
+        });
+        function ShowCol() {
+            var sel = $('#modalita_inserimento').val();
+            if (sel == 1) {
+                $('#div_annuale').show();
+                $('#div_mensile').hide();
+                $('#div_orario').hide();
+            } else if (sel == 2) {
+                $('#div_annuale').hide();
+                $('#div_mensile').show();
+                $('#div_orario').hide();
+            } else if (sel == 3) {
+                $('#div_annuale').hide();
+                $('#div_mensile').hide();
+                $('#div_orario').show();
+
+            } else {
+                $('#div_annuale').hide();
+                $('#div_mensile').hide();
+                $('#div_orario').hide();
+            }
+        }
+
+        function sendMonthsValue() {
+
+
+            var formData = {
+                Gennaio: $('#Consumo_Genn').val(),
+                Febbraio: $('#Consumo_Feb').val(),
+                Marzo: $('#Consumo_Marzo').val(),
+                Aprile: $('#Consumo_Apr').val(),
+                Maggio: $('#Consumo_Maggio').val(),
+                Giugno: $('#Consumo_Giu').val(),
+                Luglio: $('#Consumo_Lug').val(),
+                Agosto: $('#Consumo_Ago').val(),
+                Settembre: $('#Consumo_Set').val(),
+                Ottobre: $('#Consumo_Ott').val(),
+                Novembre: $('#Consumo_Nov').val(),
+                Dicembre: $('#Consumo_Dic').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: 'DatiUtenze/SaveMonths',
+                data: formData,
+                success: function (data) {
+
+                },
+                error: function () {
+
+                    // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
+                }
+            });
+        }
+
+
+        function sendSelectedUtenze() {
+            var Forma_Utenza = document.getElementById("Forma_Utenza").value;
+            var N_Cluster = document.getElementById("n_utenze").value;
+            var Tipo_Utenza = document.getElementById("Tipo_Utenza").value;
+            var modalita_inserimento = document.getElementById("modalita_inserimento").value;
+
+            var formData = {
+                Forma_Utenza: Forma_Utenza,
+                N_Cluster: N_Cluster,
+                Tipo_Utenza: Tipo_Utenza,
+                Modalita_Inserimento: modalita_inserimento
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: 'DatiUtenze/SaveDatiUtenze',
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                    if (data == '1') {
+                        window.location.href = '/DatiTecnici';
+                    } else {
+                        Swal.fire("Configurazione Completata", "", "success");
+                    }
+
+                },
+                error: function () {
+
+                    // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
+                }
+            });
+        }
+    </script>
+
+    <script>
+        // Date Picker
+        var Table_Consumer;
+        var Table_Prosumer;
+        var Table_Impianto;
+
+
+        jQuery('.mydatepicker, #datepicker, .input-group.date').datepicker(
+            {
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years"
+            }
+        );
+        jQuery('#datepicker-autoclose').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+        jQuery('#date-range').datepicker({
+            toggleActive: true
+        });
+        jQuery('#datepicker-inline').datepicker({
+            todayHighlight: true
+        });
+
+        $(document).ready(function () {
+            Table_Consumer = $('#grd_Consumer').DataTable({
+                "language":
+                {
+                    "url": url,
+                    "decimal": ',',
+                    "thousands": '.',
+
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        className: 'btn btn-info',
+                        title:  'Consumer',
+                        exportOptions: {
+                            format: {
+                                body: function (data, row, column, node) {
+                                    data = $('<p>' + data + '</p>').text().replace(' warning', '');
+                                    return $.isNumeric(data.replace(',', '.').replace('€', '')) ? data.replace(',', '.').replace('€', '') : data;
+                                }
+                            }
+
+
+                        }
+
+
+                    }
+                ],
+                "paging": true,
+                dom: 'Biflrtp',
+                "lengthMenu": [[-1, 10, 25, 50], ['Tutti', 10, 25, 50]],
+                "columnDefs":
+                    [
+                       /* {
+                            "targets": 'no-sort',
+                            "orderable": false,
+                        },
+                        {
+                            "targets": 2,
+                            "type": "date-eu"
+                        },
+                        {
+                            "targets": 3,
+                            "orderable": false
+                        },
+                        {
+                            "targets": 5,
+                            "visible": false
+                        }
+                        */
+
+                    ],
+                "columns": [
+                    { data: 'DESCRIZIONE' },
+                    { data: 'FORMA'}
+                    { data: 'TIPOLOGIA_UTENZA' },
+                    { data: 'NUMERO_UTENZE' },
+                    { data: 'MODALITA_INSERIMENTO' },
+                    { data: 'BTN' }
+
+                ]
+            })
+            
+        })
+
+        function AddUtenza(Descrzione, Forma_Utenza, Tipologia_Utenza, Numero_Utenze, Modalita, Id_Consumer) {
+
+
+
+            var apo = String.fromCharCode(39);
+            myData = [
+                {
+                    "DESCRIZIONE": Descrzione,
+                    "FORMA": Forma_Utenza;
+                    "TIPOLOGIA_UTENZA": Tipologia_Utenza,
+                    "NUMERO_UTENZE": Numero_Utenze,
+                    "MODALITA_INSERIMENTO": Modalita,
+                    "BTN": '<button type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="SetIdFattura(' + apo + Id_Consumer + apo + ');$(' + apo + '#edit_costo_fatture' + apo + ').modal()"><i class="fas fa-pencil-alt"></i></button>        <button type="button" class="btn btn-sm btn-info mr-1" onclick="ShowDett(' + apo + Id_Consumer + apo + ')" ><i class="fas fa-eye"></i><button type="button" class="btn btn-sm mr-1 btn-info" onclick="AnteprimaFile(' + apo + id_fattura + apo + ')" ><i class="fas fa-search-plus"></i></button><button type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="GetDett(' + apo + id_fattura + apo + ')"><i class="fas fa-arrow-right"></i></button><button type="button" id="btn_cancella%ID%" name="btn" onclick="SetIdFattura(' + apo + Id_Consumer + apo + ')" id="sa-confirm" class="btn btn-sm ml-1 btn-danger cancel2"><i class="fas fa-trash-alt"></i></button>'
+                    //     "input": '  <button type="button" class="btn btn-sm btn-info mr-1" onclick="SetId('+apo+id+apo+')" ><i class="fas fa-pencil-alt"></i></button>'+'<button type="button" id="sa-confirm" onclick="Delete('+apo+id+apo+')" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>',
+                }
+
+            ];
+
+
+
+
+
+            FtableFatture.rows.add(myData);
+
+
+
+        }
+
+    </script>
+
+    <!-- My Js File-->
+    <!-- <script src="../dist/js/DashboardJs/dashboard.js"></script> -->
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>
