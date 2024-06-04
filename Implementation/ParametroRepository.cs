@@ -1,35 +1,46 @@
 ﻿using Dashboard.BusinessLayer;
+using Dashboard.Database;
 using Dashboard.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dashboard.Implementation
 {
-    public class ParametroRepository : IParametroRepository
+    public class ParametroRepository : IBaseRepositable<Parametro>
     {
-        private readonly DbContext _dbContext;
+        private readonly AppDbContext _dbContext;
 
-        public ParametroRepository(DbContext dbContext)
+        public ParametroRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void Add(Parametro parametro)
+
+        public void Add(Parametro entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Parametro.Add(entity);
+            _dbContext.SaveChanges();
         }
 
-        public void Delete(int parametroId)
+        public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var parametro = GetById(id);
+            if (parametro != null)
+            {
+                _dbContext.Parametro.Remove(parametro);
+                _dbContext.SaveChanges();
+            }
+            return true;
         }
 
-        public Parametro GetById(int parametroId)
+        public Parametro GetById(int id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Parametro.Find(id);
         }
 
-        public void Update(Parametro parametro)
+        public bool Update(Parametro entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Parametro.Update(entity);
+            _dbContext.SaveChanges();
+            return true;
         }
     }
 }

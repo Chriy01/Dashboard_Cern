@@ -1,4 +1,5 @@
-﻿using Dashboard.Database;
+﻿using Dashboard.BusinessLayer;
+using Dashboard.Database;
 using Dashboard.Interfaces;
 
 namespace Dashboard.Implementation
@@ -6,27 +7,59 @@ namespace Dashboard.Implementation
     public class DatabaseService : IDatabaseService
     {
         private readonly AppDbContext _dbContext;
-        private readonly IParametroRepository _parametroRepository;
-        private readonly ITipologiaParametroRepository _tipologiaParametroRepository;
-        private readonly IComunitaRepository _comunitaRepository;
-
-        public DatabaseService(AppDbContext dbContext, IParametroRepository parametroRepository, ITipologiaParametroRepository tipologiaParametroRepository, IComunitaRepository comunitaRepository)
+        private ParametroRepository _parametroRepository;
+        private TipologiaParametroRepository _tipologiaParametroRepository;
+        private ComunitaRepository _comunitaRepository;
+        private UtenteRepository _utenteRepository;
+        public DatabaseService(AppDbContext dbContext)
         {
             _dbContext = dbContext;
-            _parametroRepository = parametroRepository;
-            _tipologiaParametroRepository = tipologiaParametroRepository;
-            _comunitaRepository = comunitaRepository;
         }
 
-        public IParametroRepository ParametroRepository => _parametroRepository;
+        public ParametroRepository ParametroRepository
+        {
+            get
+            {
+                if (_parametroRepository == null)
+                    _parametroRepository = new ParametroRepository(_dbContext);
+                return _parametroRepository;
+            }
+        }
 
-        public ITipologiaParametroRepository TipologiaParametroRepository => _tipologiaParametroRepository;
+        public UtenteRepository UtenteRepository
+        {
+            get
+            {
+                if (_utenteRepository == null)
+                    _utenteRepository = new UtenteRepository(_dbContext);
+                return _utenteRepository;
+            }
+        }
 
-        public IComunitaRepository ComunitaRepository => _comunitaRepository;
+        public TipologiaParametroRepository TipologiaParametroRepository
+        {
+            get
+            {
+                if (_tipologiaParametroRepository == null)
+                    _tipologiaParametroRepository = new TipologiaParametroRepository(_dbContext);
+                return _tipologiaParametroRepository;
+            }
+        }
+
+        public ComunitaRepository ComunitaRepository
+        {
+            get
+            {
+                if (_comunitaRepository == null)
+                    _comunitaRepository = new ComunitaRepository(_dbContext);
+                return _comunitaRepository;
+            }
+        }
 
         public void SaveChanges()
         {
             _dbContext.SaveChanges();
         }
     }
+
 }

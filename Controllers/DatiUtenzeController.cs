@@ -8,7 +8,14 @@ namespace Dashboard.Controllers
     {
         public IActionResult Index()
         {
-            return View("DatiUtenze");
+            if ((HttpContext.Session.GetInt32("UserID") != null) || (HttpContext.Session.GetInt32("UserID") > -1))
+            {
+                return View("DatiUtenze");
+            }
+            else
+            {
+                return RedirectToAction("Login","Home");
+            }
         }
 
         [HttpPost]

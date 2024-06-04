@@ -4,7 +4,7 @@ using Dashboard.Interfaces;
 
 namespace Dashboard.Implementation
 {
-    public class TipologiaParametroRepository : ITipologiaParametroRepository
+    public class TipologiaParametroRepository : IBaseRepositable<TipologiaParametro>
     {
         private readonly AppDbContext _dbContext;
 
@@ -24,21 +24,24 @@ namespace Dashboard.Implementation
             _dbContext.SaveChanges();
         }
 
-        public void Update(TipologiaParametro tipologiaParametro)
+        public bool Update(TipologiaParametro entity)
         {
-            _dbContext.TipologiaParametro.Update(tipologiaParametro);
+            _dbContext.TipologiaParametro.Update(entity);
             _dbContext.SaveChanges();
+            return true;
         }
 
-        public void Delete(int tipologiaId)
+        public bool Delete(int id)
         {
-            var tipologia = GetById(tipologiaId);
+            var tipologia = GetById(id);
             if (tipologia != null)
             {
                 _dbContext.TipologiaParametro.Remove(tipologia);
                 _dbContext.SaveChanges();
             }
+            return true;
         }
+
     }
 
 }

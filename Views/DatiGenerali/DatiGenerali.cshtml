@@ -69,14 +69,12 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-2">
-                                <label class="" for="">Anno di riferimento</label>
-                            </div>
+
                             <div class=" ml-3 col-2">
-                                <label class="switch">
+                                
                                     <input id="check_mercato" onchange="SwitchCosto()" type="checkbox">
-                                    <span class="slider round" style="width: auto;height: auto;"></span>
-                                </label>
+                    
+                              
                             </div>
                             <div class="col-2">
                                 <label class="" for="">Personalizzato</label>
@@ -391,10 +389,8 @@
     <script>
         function SwitchCosto() {
             if ($('#check_mercato').is(":checked")) {
-                $('#referal_year').hide();
                 $('#parameters_col').show();
             }else{
-                $('#referal_year').show();
                 $('#parameters_col').hide();
             }
         }

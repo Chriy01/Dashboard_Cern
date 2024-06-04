@@ -1,12 +1,14 @@
-﻿using System.Reflection.Metadata;
+﻿using Dashboard.Implementation;
+using System.Reflection.Metadata;
 
 namespace Dashboard.Interfaces
 {
     public interface IDatabaseService
     {
-        IParametroRepository ParametroRepository { get; }
-        ITipologiaParametroRepository TipologiaParametroRepository { get; }
-        IComunitaRepository ComunitaRepository { get; }
+        ParametroRepository ParametroRepository { get; }
+        TipologiaParametroRepository TipologiaParametroRepository { get; }
+        ComunitaRepository ComunitaRepository { get; }
+        UtenteRepository UtenteRepository { get; }
     }
 
 }

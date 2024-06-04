@@ -8,6 +8,15 @@
 <link href="../assets/extra-libs/jquery-steps/steps.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../dist/css/View_css/DatiGenerali.css">
 <link rel="stylesheet" type="text/css" href="../assets/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+<style>
+    #map {
+        height: 600px;
+        width: 100%;
+    }
+</style>
 <div class="page-wrapper">
     <!-- ============================================================== -->
     <!-- Bread crumb and right sidebar toggle -->
@@ -270,6 +279,7 @@
             </div><!-- /.modal-dialog -->
         </div>
 
+
         <div class="modal fade" tabindex="-1" role="dialog" id="centermodal_prosumer" aria-hidden="true">
             <div class="modal-dialog modal-full-width">
                 <div class="modal-content">
@@ -319,7 +329,7 @@
                                                 <div class="col-4" id="col_cluster_Prosumer">
 
                                                     <h4 class="card-title">N° utenze nel cluster</h4>
-                                                    <input type="number" id="n_utenze_Prosumer" class="form-control" value="1">
+                                                    <input disabled type="number" id="n_utenze_Prosumer" class="form-control" value="1">
                                                 </div>
                                             </div>
                                             <div class="row mt-3">
@@ -374,11 +384,11 @@
                                         <h6>Dati dell'Impianto</h6>
                                         <section>
                                             <div class="row">
-                                                <div class="col-6">
+                                                <div class="col-4">
                                                     <div class="form-group">
                                                         <label for="inflazione">Longitudine</label>
                                                         <div class="input-group mb-3">
-                                                            <input type="number" id="Longitudine" class="form-control" value="0">
+                                                            <input type="text" id="Longitudine_Prosumer" class="form-control" value="0">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">°</span>
                                                             </div>
@@ -387,16 +397,22 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-6">
+                                                <div class="col-4">
                                                     <div class="form-group">
                                                         <label for="inflazione">Latitudine</label>
                                                         <div class="input-group mb-3">
-                                                            <input type="number" id="Latitudine" class="form-control" value="0">
+                                                            <input type="text" id="Latitudine_Prosumer" class="form-control" value="0">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">°</span>
                                                             </div>
                                                         </div>
 
+                                                    </div>
+                                                </div>
+                                                <div class="col-2" style="align-content: end;">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-success" onclick="ShowMap(0)" id="btn_map_Prosumer"><i class="mdi mdi-map"></i>Usa la mappa</button>
+                                                        
                                                     </div>
                                                 </div>
 
@@ -406,7 +422,7 @@
                                                     <div class="form-group">
                                                         <label for="inflazione">Potenza dell’impianto</label>
                                                         <div class="input-group mb-3">
-                                                            <input type="number" id="Potenza_impianto" class="form-control" value="0">
+                                                            <input type="number" id="Potenza_impianto_Prosumer" class="form-control" value="0">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">kW</span>
                                                             </div>
@@ -423,205 +439,19 @@
                                               
 
                                                 </div>
-                                                <div id="div_rinnovabile" class="col-4">
+                                                <div id="div_rinnovabile_Prosumer" class="col-4">
                                                     <label for="inflazione">Quota di potenza rinnovabile</label>
                                                     <div class="input-group mb-3">
-                                                        <input type="number" id="Potenza_rinnovabile" class="form-control" value="0">
+                                                        <input type="number" id="Potenza_rinnovabile_Prosumer" class="form-control" value="0">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">kW</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="row mt-3">
 
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Area Impianto</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="Area_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">m²</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">
-                                                            Tipologia di Impianto
-                                                        </label>
-                                                        <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Impianto_Prosumer">
-                                                            <option value="">Seleziona</option>
-                                                            <option value="1">Fisso</option>
-                                                            <option value="2">Inseguimento a doppio asse</option>
-                                                            <option value="3">Asse verticale</option>
-                                                            <option value="3">Asse inclinato</option>
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Data di entrata in esercizio</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="date" id="potenza_inverter" class="form-control pickadate " value="0">
-
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div style="align-content: center" class="col-3">
-                                                    <div onchange="ShowSezione2_Prosumer()" class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="customCheck2_Prosumer">
-                                                        <label class="custom-control-label" for="customCheck2_Prosumer">Abilita Seconda Falda</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mt-3">
                                                 <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Potenza sezione</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="Potenza_sezione1_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">kW</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Angolo di tilt (min 0°, max 90°)</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" max="90" min="0" id="angolo_di_tilt1_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Angolo di azimut (min -180°, max 180°)</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" max="180" min="-180" id="angolo_di_azimut1_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div id="sezione2_Prosumer" class="row mt-3">
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Potenza sezione 2</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="Potenza_sezione2_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">kW</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Angolo di tilt 2 (min 0°, max 90°)</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" max="90" min="0" id="angolo_di_tilt2_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Angolo di azimut 2 (min -180°, max 180°)</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" max="180" min="-180" id="angolo_di_azimut2_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-
-                                            <div class="row mt-3">
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Efficienza del pannello</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="efficienzapannello_Prosumer" class="form-control" value="0">
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Coefficiente di temperatura </label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="coef_temp_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">%/K</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">NOCT</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="noct_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°C</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Fattore di riduzione annuo delle prestazioni</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="prestazioni_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">%</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Efficienza inverter</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="efficienzainverter_Prosumer" class="form-control" value="0">
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
                                                     <div class="form-group">
                                                         <label for="inflazione">Potenza inverter</label>
                                                         <div class="input-group mb-3">
@@ -633,7 +463,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-4">
                                                     <div class="form-group">
                                                         <label for="inflazione">Capacità batteria</label>
                                                         <div class="input-group mb-3">
@@ -645,33 +475,11 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Costo ricambio batteria</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="costo_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">€</span>
-                                                            </div>
-                                                        </div>
 
-                                                    </div>
-                                                </div>
 
                                             </div>
                                             <div class="row mt-3">
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Altre Perdite</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="perdite_Prosumer" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">%</span>
-                                                            </div>
-                                                        </div>
 
-                                                    </div>
-                                                </div>
 
                                                 <div class="col-3" style="align-content:center">
 
@@ -707,13 +515,20 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-3" style="align-content:end">
                                                     <div class="form-group">
                                                         <div class="custom-control custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="checkTariffa_Prosumer">
                                                             <label class="custom-control-label" for="checkTariffa_Prosumer">Impianto escluso da tariffa premio</label>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row mt-3 mb-3">
+                                                <div class="col-12">
+
+                                                    <button style="float:right" class="btn btn-success" onclick="ShowDettaglio(0)"><i class="mdi mdi-plus-box"></i>Aggiungi dati facoltativi</button>
                                                 </div>
 
                                             </div>
@@ -1026,7 +841,7 @@
                                                 <div class="col-4" id="col_cluster_Impianto">
 
                                                     <h4 class="card-title">N° utenze nel cluster</h4>
-                                                    <input type="number" id="n_utenze_Impianto" class="form-control" value="1">
+                                                    <input disabled type="number" id="n_utenze_Impianto" class="form-control" value="1">
                                                 </div>
                                             </div>
                                             <div class="row mt-3">
@@ -1081,11 +896,11 @@
                                         <h6>Dati dell'Impianto</h6>
                                         <section>
                                             <div class="row">
-                                                <div class="col-6">
+                                                <div class="col-4">
                                                     <div class="form-group">
                                                         <label for="inflazione">Longitudine</label>
                                                         <div class="input-group mb-3">
-                                                            <input type="number" id="Longitudine_Impianto" class="form-control" value="0">
+                                                            <input type="text" id="Longitudine_Impianto" class="form-control" value="0">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">°</span>
                                                             </div>
@@ -1094,15 +909,21 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-6">
+                                                <div class="col-4">
                                                     <div class="form-group">
                                                         <label for="inflazione">Latitudine</label>
                                                         <div class="input-group mb-3">
-                                                            <input type="number" id="Latitudine_Impianto" class="form-control" value="0">
+                                                            <input type="text" id="Latitudine_Impianto" class="form-control" value="0">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">°</span>
                                                             </div>
                                                         </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-2" style="align-content: end;">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-success" onclick="ShowMap(1)" id="btn_map_Imp"><i class="mdi mdi-map"></i>Usa la mappa</button>
 
                                                     </div>
                                                 </div>
@@ -1140,193 +961,8 @@
                                                 </div>
                                             </div>
 
+                                            
                                             <div class="row mt-3">
-
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Area Impianto</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="Area_Impianto_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">m²</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">
-                                                            Tipologia di Impianto
-                                                        </label>
-                                                        <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Impianto_Impianto">
-                                                            <option value="">Seleziona</option>
-                                                            <option value="1">Fisso</option>
-                                                            <option value="2">Inseguimento a doppio asse</option>
-                                                            <option value="3">Asse verticale</option>
-                                                            <option value="3">Asse inclinato</option>
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Data di entrata in esercizio</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="date" id="potenza_inverter_Impianto" class="form-control pickadate " value="0">
-
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div style="align-content: center" class="col-3">
-                                                    <div onchange="ShowSezione2_Impianto()" class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="customCheck2_Impianto">
-                                                        <label class="custom-control-label" for="customCheck2_Impianto">Abilita Seconda Falda</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mt-3">
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Potenza sezione</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="Potenza_sezione1_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">kW</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Angolo di tilt (min 0°, max 90°)</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" max="90" min="0" id="angolo_di_tilt1_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Angolo di azimut (min -180°, max 180°)</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" max="180" min="-180" id="angolo_di_azimut1_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div id="sezione2_Impianto" class="row mt-3">
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Potenza sezione 2</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="Potenza_sezione2_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">kW</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Angolo di tilt 2 (min 0°, max 90°)</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" max="90" min="0" id="angolo_di_tilt2_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Angolo di azimut 2 (min -180°, max 180°)</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" max="180" min="-180" id="angolo_di_azimut2_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-
-                                            <div class="row mt-3">
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Efficienza del pannello</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="efficienzapannello_Impianto" class="form-control" value="0">
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Coefficiente di temperatura </label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="coef_temp_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">%/K</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">NOCT</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="noct_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">°C</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Fattore di riduzione annuo delle prestazioni</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="prestazioni_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">%</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Efficienza inverter</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="efficienzainverter_Impianto" class="form-control" value="0">
-                                                        </div>
-
-                                                    </div>
-                                                </div>
                                                 <div class="col-3">
                                                     <div class="form-group">
                                                         <label for="inflazione">Potenza inverter</label>
@@ -1351,34 +987,11 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Costo ricambio batteria</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="costo_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">€</span>
-                                                            </div>
-                                                        </div>
 
-                                                    </div>
-                                                </div>
 
                                             </div>
+
                                             <div class="row mt-3">
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label for="inflazione">Altre Perdite</label>
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" id="perdite_Impianto" class="form-control" value="0">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">%</span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-3" style="align-content:center">
 
                                                     <div class=" ml-5 bootstrap-switch-mini bootstrap-switch bootstrap-switch-wrapper bootstrap-switch-animate bootstrap-switch-on" style="width: fit-content;">
@@ -1413,13 +1026,21 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-3" style="align-content:end">
                                                     <div class="form-group">
                                                         <div class="custom-control custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="checkTariffa_Impianto">
                                                             <label class="custom-control-label" for="checkTariffa_Impianto">Impianto escluso da tariffa premio</label>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mt-3 mb-3">
+                                                <div class="col-12">
+
+                                                    <button style="float:right" class="btn btn-success" onclick="ShowDettaglio(1)"><i class="mdi mdi-plus-box"></i>Aggiungi dati facoltativi</button>
                                                 </div>
 
                                             </div>
@@ -1684,6 +1305,486 @@
             </div><!-- /.modal-dialog -->
         </div>
 
+        <div class="modal fade" tabindex="-1" role="dialog" id="centermodalmap_prosumer" aria-hidden="true">
+            <div class="modal-dialog modal-full-width">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myCenterModalLabel">Seleziona il punto sulla mappa</h4>
+                        <button type="button" class="close ml-auto" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div id="map"></div>
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" onclick="InsertValues()"><i class="mdi"></i>Salva</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="approfondimento_prosumer" aria-hidden="true">
+            <div class="modal-dialog modal-full-width">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myCenterModalLabel">Aggiungi i dettagli del prosumer</h4>
+                        <button type="button" class="close ml-auto" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row mt-3">
+
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Area Impianto</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="Area_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">m²</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">
+                                        Tipologia di Impianto
+                                    </label>
+                                    <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Impianto_Prosumer">
+                                        <option value="">Seleziona</option>
+                                        <option value="1">Fisso</option>
+                                        <option value="2">Inseguimento a doppio asse</option>
+                                        <option value="3">Asse verticale</option>
+                                        <option value="3">Asse inclinato</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Data di entrata in esercizio</label>
+                                    <div class="input-group mb-3">
+                                        <input type="date" id="data_potenza_inverter_Prosumer" class="form-control pickadate " value="0">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="align-content: center" class="col-3">
+                                <div onchange="ShowSezione2_Prosumer()" class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2_Prosumer">
+                                    <label class="custom-control-label" for="customCheck2_Prosumer">Abilita Seconda Falda</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Potenza sezione</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="Potenza_sezione1_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">kW</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Angolo di tilt (min 0°, max 90°)</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" max="90" min="0" id="angolo_di_tilt1_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Angolo di azimut (min -180°, max 180°)</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" max="180" min="-180" id="angolo_di_azimut1_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="sezione2_Prosumer" class="row mt-3">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Potenza sezione 2</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="Potenza_sezione2_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">kW</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Angolo di tilt 2 (min 0°, max 90°)</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" max="90" min="0" id="angolo_di_tilt2_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Angolo di azimut 2 (min -180°, max 180°)</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" max="180" min="-180" id="angolo_di_azimut2_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Efficienza del pannello</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="efficienzapannello_Prosumer" class="form-control" value="0">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Coefficiente di temperatura </label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="coef_temp_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%/K</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">NOCT</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="noct_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°C</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Fattore di riduzione annuo delle prestazioni</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="prestazioni_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Efficienza inverter</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="efficienzainverter_Prosumer" class="form-control" value="0">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Costo ricambio batteria</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="costo_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">€</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Altre Perdite</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="perdite_Prosumer" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" onclick=""><i class="mdi"></i>Salva</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="approfondimento_impianto" aria-hidden="true">
+            <div class="modal-dialog modal-full-width">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myCenterModalLabel">Aggiungi i dettagli dell'Impianto</h4>
+                        <button type="button" class="close ml-auto" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mt-3">
+
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Area Impianto</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="Area_Impianto_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">m²</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">
+                                        Tipologia di Impianto
+                                    </label>
+                                    <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Impianto_Impianto">
+                                        <option value="">Seleziona</option>
+                                        <option value="1">Fisso</option>
+                                        <option value="2">Inseguimento a doppio asse</option>
+                                        <option value="3">Asse verticale</option>
+                                        <option value="3">Asse inclinato</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Data di entrata in esercizio</label>
+                                    <div class="input-group mb-3">
+                                        <input type="date" id="data_potenza_inverter_Impianto" class="form-control pickadate " value="0">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="align-content: center" class="col-3">
+                                <div onchange="ShowSezione2_Impianto()" class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2_Impianto">
+                                    <label class="custom-control-label" for="customCheck2_Impianto">Abilita Seconda Falda</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Potenza sezione</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="Potenza_sezione1_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">kW</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Angolo di tilt (min 0°, max 90°)</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" max="90" min="0" id="angolo_di_tilt1_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Angolo di azimut (min -180°, max 180°)</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" max="180" min="-180" id="angolo_di_azimut1_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="sezione2_Impianto" class="row mt-3">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Potenza sezione 2</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="Potenza_sezione2_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">kW</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Angolo di tilt 2 (min 0°, max 90°)</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" max="90" min="0" id="angolo_di_tilt2_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inflazione">Angolo di azimut 2 (min -180°, max 180°)</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" max="180" min="-180" id="angolo_di_azimut2_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Efficienza del pannello</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="efficienzapannello_Impianto" class="form-control" value="0">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Coefficiente di temperatura </label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="coef_temp_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%/K</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">NOCT</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="noct_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">°C</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Fattore di riduzione annuo delle prestazioni</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="prestazioni_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Efficienza inverter</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="efficienzainverter_Impianto" class="form-control" value="0">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Costo ricambio batteria</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="costo_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">€</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inflazione">Altre Perdite</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" id="perdite_Impianto" class="form-control" value="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" onclick=""><i class="mdi"></i>Salva</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
 
 
 
@@ -1873,12 +1974,50 @@
     <script src="../src/assets/libs/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="../../dist/js/app-style-switcher.js"></script>
     <script src="../src/assets/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
-
-
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <script>
-        var url = "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Italian.json";
+        var lat
+        var lng
+        // Crea la mappa e impostala su una vista iniziale con una determinata latitudine e longitudine e livello di zoom
+        var map = L.map('map').setView([41.8903, 12.4922], 13);
+
+        // Aggiungi il layer delle mappe di OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Aggiungi un marker iniziale (opzionale)
+        var marker = L.marker([41.8903, 12.4922]).addTo(map);
+        var geocoder = L.Control.geocoder({
+            defaultMarkGeocode: false
+        })
+            .on('markgeocode', function (e) {
+                var latlng = e.geocode.center;
+                marker.setLatLng(latlng).addTo(map);
+                map.setView(latlng, map.getZoom());
+                document.getElementById('coordinates').innerText = "Latitudine: " + latlng.lat + ", Longitudine: " + latlng.lng;
+            })
+            .addTo(map);
+
+        // Aggiungi un evento click alla mappa per ottenere le coordinate
+        map.on('click', function (e) {
+            lat = e.latlng.lat;
+            lng = e.latlng.lng;
+
+            // Sposta il marker sulla nuova posizione cliccata
+            marker.setLatLng([lat, lng]);
+
+            // Mostra le coordinate nella console
+            console.log("Latitudine: " + lat + ", Longitudine: " + lng);
+
+            // Aggiorna l'elemento HTML per mostrare le coordinate all'utente
+            document.getElementById('coordinates').innerText = "Latitudine: " + lat + ", Longitudine: " + lng;
+        });
+
     </script>
+
     <script>
 
         function ShowCol() {
@@ -2239,9 +2378,29 @@
                 $('#divFinanziamentoImpianto').show();
             }
         }
+        var type_
+        function ShowMap(t) {
+            type_ = t
+            $('#centermodalmap_prosumer').on('transitionend', function () { map.invalidateSize(); });
 
 
-        function ContoChangeProsumer() {
+            $('#centermodalmap_prosumer').modal();
+       
+        }
+
+        function InsertValues(){
+            if(type_ == 0){
+                $('#Latitudine_Prosumer').val(lat);
+                $('#Longitudine_Prosumer').val(lng);
+            }else{
+                $('#Latitudine_Impianto').val(lat);
+                $('#Longitudine_Impianto').val(lng);
+            }
+            $('#centermodalmap_prosumer').modal("hide");
+        }
+
+
+                function ContoChangeProsumer() {
             if ($('#CheckContoProsumer').is(':checked') == false) {
 
                 $('#divContoProsumer').hide();
@@ -2383,7 +2542,7 @@
 
         function SwitchCosto_Prosumer() {
 
-            if ($('#mod_Prosumer').is(':checked') == false) {
+            if ($('#mod_Prosumer').is(':checked') == true) {
                 costoTot_Prosumer = 0;
                 $('#divCostoTot_Prosumer').hide();
                 $('#divCostokW_Prosumer').show();
@@ -2432,7 +2591,7 @@
 
         function SwitchCosto_Impianto() {
 
-            if ($('#mod_Impianto').is(':checked') == false) {
+            if ($('#mod_Impianto').is(':checked') == true) {
                 costoTot_Impianto = 0;
                 $('#divCostoTot_Impianto').hide();
                 $('#divCostokW_Impianto').show();
@@ -2443,6 +2602,14 @@
             }
 
 
+        }
+
+        function ShowDettaglio(values){
+            if(values==0){
+                $('#approfondimento_prosumer').modal('show');
+            }else{
+                $('#approfondimento_impianto').modal('show');
+            }
         }
      </script>
     <script src="../dist/js/app-style-switcher.horizontal.js"></script>

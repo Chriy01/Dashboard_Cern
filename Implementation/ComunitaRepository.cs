@@ -4,7 +4,7 @@ using Dashboard.Interfaces;
 
 namespace Dashboard.Implementation
 {
-    public class ComunitaRepository : IComunitaRepository
+    public class ComunitaRepository : IBaseRepositable<Comunita>
     {
         private readonly AppDbContext _dbContext;
 
@@ -17,27 +17,33 @@ namespace Dashboard.Implementation
         {
             return _dbContext.Comunita.Find(comunitaId);
         }
-
-        public void Add(Comunita comunita)
+        Comunita IBaseRepositable<Comunita>.GetById(int id)
         {
-            _dbContext.Comunita.Add(comunita);
+            return _dbContext.Comunita.Find(id);
+        }
+
+        public void Add(Comunita entity)
+        {
+            _dbContext.Comunita.Add(entity);
             _dbContext.SaveChanges();
         }
 
-        public void Update(Comunita comunita)
+        public bool Update(Comunita entity)
         {
-            _dbContext.Comunita.Update(comunita);
+            _dbContext.Comunita.Update(entity);
             _dbContext.SaveChanges();
+            return true;
         }
 
-        public void Delete(int comunitaId)
+        bool IBaseRepositable<Comunita>.Delete(int id)
         {
-            var comunita = GetById(comunitaId);
+            var comunita = GetById(id);
             if (comunita != null)
             {
                 _dbContext.Comunita.Remove(comunita);
                 _dbContext.SaveChanges();
             }
+            return true;
         }
     }
 }

@@ -6,7 +6,14 @@ namespace Dashboard.Controllers
     {
         public IActionResult Index()
         {
-            return View("DatiTecnici");
+            if ((HttpContext.Session.GetInt32("UserID") != null) || (HttpContext.Session.GetInt32("UserID") > -1))
+            {
+                return View("DatiTecnici");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
         }
     }
 }

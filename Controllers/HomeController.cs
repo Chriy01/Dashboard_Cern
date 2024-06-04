@@ -11,6 +11,8 @@ using System.Reflection;
 using Dashboard.Utilities;
 using Dashboard.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Session;
 
 namespace Dashboard.Controllers
 {
@@ -18,6 +20,7 @@ namespace Dashboard.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly AppDbContext _dbContext;
+
         double[] ssiData = null;
         double[] sciData = null;
 
@@ -38,21 +41,38 @@ namespace Dashboard.Controllers
         {
             _dbContext = dbContext;
             _logger = logger;
+                 
+        }
+        public ActionResult Login()
+        {
+            HttpContext.Session.SetInt32("UserID", -1);
+            return RedirectToAction("Index","Login");
         }
 
         public IActionResult Index()
         {
+            
+            if ((HttpContext.Session.GetInt32("UserID") != null) || (HttpContext.Session.GetInt32("UserID") > -1))
+            {
+                return View("Index");
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+            /*
             List<SelectListItem> options = new List<SelectListItem>
             {
                 new SelectListItem { Value = "fixed", Text = "Determinato" },
                 new SelectListItem { Value = "parametric", Text = "Parametrico" }
             };
             ViewBag.Options = options;
-            ModelP = new ParametersMd();
-          //  var p = _dbContext.Comunita.ToArray();
-        
-            return View("Index");
+            ModelP = new ParametersMd();*/
+            //  var p = _dbContext.Comunita.ToArray();
+
+           
         }
+
 
         [HttpPost]
         public async Task<IActionResult> SaveSelectedValue(string User_Type)
