@@ -9,6 +9,8 @@ namespace Dashboard.Interfaces
         TipologiaParametroRepository TipologiaParametroRepository { get; }
         ComunitaRepository ComunitaRepository { get; }
         UtenteRepository UtenteRepository { get; }
+        ConsumerRepository ConsumerRepository { get; }
+        ProsumerRepository ProsumerRepository { get; }
     }
 
 }

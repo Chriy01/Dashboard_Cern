@@ -1,11 +1,13 @@
-﻿namespace Dashboard.Interfaces
+﻿using Dashboard.BusinessLayer;
+
+namespace Dashboard.Interfaces
 {
     public interface IBaseRepositable<T>
     {
-        T GetById(int id);
+        Task<T> GetById(int id);
         void Add(T entity);
         bool Update(T entity);
-        bool Delete(int id);
+        Task<bool> Delete(int id);
 
 
 

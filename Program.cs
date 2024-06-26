@@ -5,31 +5,29 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MySql.EntityFrameworkCore.Extensions;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddAuthentication()
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
             options.LoginPath = "/Login";
             options.AccessDeniedPath = "/Login";
-        })
-        ;
+        });
+
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".AdventureWorks.Session";
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.IdleTimeout = TimeSpan.FromMinutes(20); // Cambiato da secondi a minuti per una sessione più realistica
     options.Cookie.IsEssential = true;
 });
 
-
-
 // Configurazione della connessione al database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options => options.UseMySQL("Server=194.163.144.128;Database=CERN;user=ha;password=!Microdsrl_2023;"));
-
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySQL("Server=194.163.144.128;Database=CERN;user=ha;password=!Microdsrl_2023;"));
 
 var app = builder.Build();
 
@@ -37,21 +35,19 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
-app.UseSession();
+app.UseAuthentication(); // Aggiungi UseAuthentication prima di UseAuthorization
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Index}/{id?}"
-    
-    );
-
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

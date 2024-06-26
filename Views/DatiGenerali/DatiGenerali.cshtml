@@ -170,7 +170,7 @@
 
                 </div>
 
-                <button style="float: right;" class="btn btn-success" onclick="sendSelectedGenerali()" id="btn_start"><i class="mdi mdi-play-circle"></i> Continua</button>
+                <button style="float: right;" class="btn btn-success" onclick="sendSelectedGenerali()" id="btn_start"><i class="mdi mdi-play-circle"></i> Salva</button>
 
             </div>
         </div>
@@ -410,15 +410,17 @@
 
 
         function sendSelectedGenerali() {
-            var ZonaMercato = document.getElementById("ZonaMercato").value;
+            var Zona_Mercato = document.getElementById("ZonaMercato").value;
             var Tipo_Conf;
+            var nome_Comunita = $('#nome_com').val();
             if ($('#customControlValidation2').is(':checked') == true) {
                 Tipo_Conf = 0;
             } else {
                 Tipo_Conf = 1;
             }
             var formData = {
-                ZonaMercato: ZonaMercato,
+                Nome_Comunita: nome_Comunita
+                ZonaMercato: Zona_Mercato,
                 Tipo_Conf: Tipo_Conf,
                 Inflazione: $('#Inflazione').val(),
                 Interesse: $('#Interesse').val(),
@@ -431,7 +433,7 @@
                 url: 'DatiGenerali/SaveDatiGenerali',
                 data: formData,
                 success: function (data) {
-                    window.location.href = '/DatiUtenze';
+                    
                 },
                 error: function () {
       

@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Dashboard.Implementation
 {
-    public class UtenteRepository : BaseRepository,IBaseRepositable<Utente>
+    public class Utente_ComunitaRepository : BaseRepository,IBaseRepositable<Utente>
     {
         private readonly AppDbContext _dbContext;
 
-        public UtenteRepository(AppDbContext dbContext)
+        public Utente_ComunitaRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -33,28 +33,17 @@ namespace Dashboard.Implementation
             throw new NotImplementedException();
         }
 
-        public async Task<int> GetByUsernamePassword(string username, string password)
+        public async Task<List<Utente_Comunita>> GetUtente_ComunitaByIdUtente(int Utente_Id)
         {
             try
-            {
-                password = ComputeMD5Hash(password);
-                var us = await _dbContext.Utente.Where(u => u.Username.ToUpper() == username && u.Password == password).SingleOrDefaultAsync();
-                if (us != null)
-                {
-       
-                    return us.Utente_Id;
+            {                              
+                return await _dbContext.Utente_Comunita.Where(uc => uc.Utente_Id == Utente_Id).ToListAsync();
 
-                }
-                else
-                {
-                    return -1;
-                }
-                
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Errore durante l'esecuzione della query: {ex.Message}");
-                return -1;
+                return null;
             }
 
         }

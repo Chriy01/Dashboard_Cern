@@ -13,13 +13,17 @@ using Dashboard.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Session;
+using Dashboard.BusinessLayer;
+using Dashboard.Implementation;
 
 namespace Dashboard.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly DatabaseService _repo;
         private readonly AppDbContext _dbContext;
+       
 
         double[] ssiData = null;
         double[] sciData = null;
@@ -41,11 +45,12 @@ namespace Dashboard.Controllers
         {
             _dbContext = dbContext;
             _logger = logger;
-                 
+            _repo = new DatabaseService(dbContext);
         }
         public ActionResult Login()
         {
             HttpContext.Session.SetInt32("UserID", -1);
+            HttpContext.Session.SetInt32("Comunita_Id", -1);
             return RedirectToAction("Index","Login");
         }
 
@@ -74,6 +79,8 @@ namespace Dashboard.Controllers
         }
 
 
+
+
         [HttpPost]
         public async Task<IActionResult> SaveSelectedValue(string User_Type)
         {
@@ -81,8 +88,55 @@ namespace Dashboard.Controllers
             return Json(""); // o un'altra azione
         }
 
-        // Metodo per la chiamata JavaScript dal C#
         [HttpGet]
+        public async Task<JsonResult> GetTable()
+        {
+            var userId = HttpContext.Session.GetInt32("UserID");
+            var _utente_comunita = new List<Utente_Comunita>();
+
+            if (userId != null)
+            {
+                _utente_comunita = await _repo.Utente_ComunitaRepository.GetUtente_ComunitaByIdUtente((int)userId);
+            }
+            
+            var comunitaInfoList = new List<ComunitaInfo>();
+
+            foreach (var item in _utente_comunita)
+            {
+                var _comunita = await _repo.ComunitaRepository.GetById(item.Comunita_Id);
+
+                if (_comunita != null)
+                {
+                    var comunitaInfo = new ComunitaInfo
+                    {
+                        Nome = _comunita.Nome,
+                        Anno = DateTime.Now.Year, // Supponendo l'anno corrente, puoi modificarlo secondo necessità
+                        ZdM = _comunita.Zona_di_mercato,
+                        Tipologia = _comunita.iscomunita ? "Comunità" : "",
+                        ZG = _comunita.zona_geografica,
+                        Btn = "<button type=\"button\" class=\"btn btn-sm mr-2 btn-info\" data-toggle=\"modal\" onclick=\"Modi(" + _comunita.Comunita_Id.ToString() + ")\"><i class=\"fas fa-pencil-alt\"></i></button>" + "<button type=\"button\" id=\"sa-confirm\" onclick=\"SetId('"+ _comunita.Comunita_Id.ToString() + "')\" class=\"btn btn-sm btn-danger btncancel\"><i class=\"fas fa-trash-alt\"></i></button>" // Questo deve essere specificato secondo necessità
+                    };
+                    comunitaInfoList.Add(comunitaInfo);
+                }
+            }
+
+            return Json(comunitaInfoList);
+
+
+
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ModificaComunita(Dictionary<string, string> formData)
+        {
+            var id = formData["id"].ToUpper();
+            HttpContext.Session.SetInt32("Comunita_Id", Convert.ToInt32(id));
+            return RedirectToAction("Index", "DatiUtenze", new { Id = id });
+        }
+
+            // Metodo per la chiamata JavaScript dal C#
+            [HttpGet]
         public IActionResult TestFunction()
         {
             Thread.Sleep(2000);
@@ -227,8 +281,17 @@ namespace Dashboard.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        private class ComunitaInfo
+        {
+            public string Nome { get; set; }
+            public int Anno { get; set; }
+            public string ZdM { get; set; } // Zona di Mercato
+            public string Tipologia { get; set; }
+            public string ZG { get; set; } // Zona Geografica
+            public string Btn { get; set; }
+        }
 
-      
+
     }
     public class MyResponseObject
     {
@@ -236,4 +299,5 @@ namespace Dashboard.Controllers
         public List<List<double>> sci_configurations { get; set; }
         public List<List<double>> ssi_configurations { get; set; }
     }
+
 }

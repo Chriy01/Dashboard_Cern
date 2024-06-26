@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
+
 <style>
     #map {
         height: 600px;
@@ -74,7 +75,7 @@
                     <div class="card-body collapse show">
                         <div class="row">
                             <div class="col-12">
-                                <button class="btn btn-success" style="float:right;width:100px" onclick="ShowPopupConsumer()"><i class="mdi"></i>Nuovo</button>
+                                <button class="btn btn-success" style="float:right;width:100px" onclick="ShowPopupConsumer();"><i class="mdi"></i>Nuovo</button>
                             </div>
                             
                         </div>
@@ -188,34 +189,32 @@
                     </div>
                     <div class="modal-body">
                         <div class="row" id="Input_Consumer">
-                                <div class="col-4">
+                            <div class="col-3">
+                                <h4 class="card-title">Nome</h4>
+                                <input class="form-control" type="text" name="nome_consumer" id="nome_consumer" />
+
+                            </div>
+                                <div class="col-3">
                                     <h4 class="card-title">Forma dell'Utenza</h4>
                                     <select class="select2 form-control custom-select select2-hidden-accessible" id="Forma_Utenza">
                                         <option value="">Seleziona</option>
-                                        <option value="pr">Privato</option>
-                                        <option value="az">Azienda</option>
-                                        <option value="pub">Pubblico</option>
+                                        <option value="0">Privato</option>
+                                        <option value="1">Azienda</option>
+                                        <option value="2">Pubblico</option>
 
                                     </select>
 
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3">
 
                                     <h4 class="card-title">Tipologia di Utenza</h4>
 
                                     <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Utenza">
-                                        <option value="">Seleziona</option>
-                                        <option value="1">Residenziale</option>
-                                        <option value="2">Utenze condominiali</option>
-                                        <option value="3">Supermercato / alimentari</option>
-                                        <option value="4">Industria generica</option>
-                                        <option value="5">Ufficio</option>
-                                        <option value="6">Colonnine di ricarica</option>
-                                        <option value="99">Altro</option>
+
                                     </select>
                                 </div>
 
-                                <div class="col-4" id="col_cluster">
+                                <div class="col-3" id="col_cluster">
 
                                     <h4 class="card-title">N° utenze nel cluster</h4>
                                     <input type="number" id="n_utenze" class="form-control" value="1">
@@ -299,7 +298,12 @@
                                         <h6>Dati Generali</h6>
                                         <section>
                                             <div class="row" id="Input_Prosumer">
-                                                <div class="col-4">
+                                                <div class="col-3">
+                                                    <h4 class="card-title">Nome</h4>
+                                                    <input class="form-control" type="text" id="nome_prosumer" />
+
+                                                </div>
+                                                <div class="col-3">
                                                     <h4 class="card-title">Forma dell'Utenza</h4>
                                                     <select class="select2 form-control custom-select select2-hidden-accessible" id="Forma_Utenza_Prosumer">
                                                         <option value="">Seleziona</option>
@@ -310,7 +314,7 @@
                                                     </select>
 
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-3">
 
                                                     <h4 class="card-title">Tipologia di Utenza</h4>
 
@@ -326,7 +330,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="col-4" id="col_cluster_Prosumer">
+                                                <div class="col-3" id="col_cluster_Prosumer">
 
                                                     <h4 class="card-title">N° utenze nel cluster</h4>
                                                     <input disabled type="number" id="n_utenze_Prosumer" class="form-control" value="1">
@@ -806,12 +810,17 @@
                                 <div class="card-body wizard-content">
                                     <h4 class="card-title">Inserisci i dati dell' Impianto</h4>
                                     <h6 class="card-subtitle"></h6>
-                                    <form action="#" class="tab-wizard wizard-circle">
+                                    <form action="#" class="tab-wizard2 wizard-circle">
                                         <!-- Step 1 -->
                                         <h6>Dati Generali</h6>
                                         <section>
-                                            <div class="row" id="Input_Prosumer">
-                                                <div class="col-4">
+                                            <div class="row" id="Input_Impianto">
+                                                <div class="col-3">
+                                                    <h4 class="card-title">Nome</h4>
+                                                    <input class="form-control" type="text" name="nome_impianto" id="nome_impianto" />
+
+                                                </div>
+                                                <div class="col-3">
                                                     <h4 class="card-title">Forma dell'Utenza</h4>
                                                     <select class="select2 form-control custom-select select2-hidden-accessible" id="Forma_Utenza_Impianto">
                                                         <option value="">Seleziona</option>
@@ -822,7 +831,7 @@
                                                     </select>
 
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-3">
 
                                                     <h4 class="card-title">Tipologia di Utenza</h4>
 
@@ -838,7 +847,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="col-4" id="col_cluster_Impianto">
+                                                <div class="col-3" id="col_cluster_Impianto">
 
                                                     <h4 class="card-title">N° utenze nel cluster</h4>
                                                     <input disabled type="number" id="n_utenze_Impianto" class="form-control" value="1">
@@ -1341,7 +1350,7 @@
                                 <div class="form-group">
                                     <label for="inflazione">Area Impianto</label>
                                     <div class="input-group mb-3">
-                                        <input type="number" id="Area_Impianto" class="form-control" value="0">
+                                        <input type="number" id="Area_Impianto_Prosumer" class="form-control" value="0">
                                         <div class="input-group-append">
                                             <span class="input-group-text">m²</span>
                                         </div>
@@ -1976,643 +1985,8 @@
     <script src="../src/assets/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-    <script>
-        var lat
-        var lng
-        // Crea la mappa e impostala su una vista iniziale con una determinata latitudine e longitudine e livello di zoom
-        var map = L.map('map').setView([41.8903, 12.4922], 13);
-
-        // Aggiungi il layer delle mappe di OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // Aggiungi un marker iniziale (opzionale)
-        var marker = L.marker([41.8903, 12.4922]).addTo(map);
-        var geocoder = L.Control.geocoder({
-            defaultMarkGeocode: false
-        })
-            .on('markgeocode', function (e) {
-                var latlng = e.geocode.center;
-                marker.setLatLng(latlng).addTo(map);
-                map.setView(latlng, map.getZoom());
-                document.getElementById('coordinates').innerText = "Latitudine: " + latlng.lat + ", Longitudine: " + latlng.lng;
-            })
-            .addTo(map);
-
-        // Aggiungi un evento click alla mappa per ottenere le coordinate
-        map.on('click', function (e) {
-            lat = e.latlng.lat;
-            lng = e.latlng.lng;
-
-            // Sposta il marker sulla nuova posizione cliccata
-            marker.setLatLng([lat, lng]);
-
-            // Mostra le coordinate nella console
-            console.log("Latitudine: " + lat + ", Longitudine: " + lng);
-
-            // Aggiorna l'elemento HTML per mostrare le coordinate all'utente
-            document.getElementById('coordinates').innerText = "Latitudine: " + lat + ", Longitudine: " + lng;
-        });
-
-    </script>
-
-    <script>
-
-        function ShowCol() {
-            var sel = $('#modalita_inserimento').val();
-            if (sel == 1) {
-                $('#div_annuale').show();
-                $('#div_mensile').hide();
-                $('#div_orario').hide();
-            } else if (sel == 2) {
-                $('#div_annuale').hide();
-                $('#div_mensile').show();
-                $('#div_orario').hide();
-            } else if (sel == 3) {
-                $('#div_annuale').hide();
-                $('#div_mensile').hide();
-                $('#div_orario').show();
-
-            } else {
-                $('#div_annuale').hide();
-                $('#div_mensile').hide();
-                $('#div_orario').hide();
-            }
-        }
-
-        function ShowColProsumer() {
-            var sel = $('#modalita_inserimento_Prosumer').val();
-            if (sel == 1) {
-                $('#div_annuale_Prosumer').show();
-                $('#div_mensile_Prosumer').hide();
-                $('#div_orario_Prosumer').hide();
-            } else if (sel == 2) {
-                $('#div_annuale_Prosumer').hide();
-                $('#div_mensile_Prosumer').show();
-                $('#div_orario_Prosumer').hide();
-            } else if (sel == 3) {
-                $('#div_annuale_Prosumer').hide();
-                $('#div_mensile_Prosumer').hide();
-                $('#div_orario_Prosumer').show();
-
-            } else {
-                $('#div_annuale_Prosumer').hide();
-                $('#div_mensile_Prosumer').hide();
-                $('#div_orario_Prosumer').hide();
-            }
-        }
-
-        function ShowColImpianto() {
-            var sel = $('#modalita_inserimento_Impianto').val();
-            if (sel == 1) {
-                $('#div_annuale_Impianto').show();
-                $('#div_mensile_Impianto').hide();
-                $('#div_orario_Impianto').hide();
-            } else if (sel == 2) {
-                $('#div_annuale_Impianto').hide();
-                $('#div_mensile_Impianto').show();
-                $('#div_orario_Impianto').hide();
-            } else if (sel == 3) {
-                $('#div_annuale_Impianto').hide();
-                $('#div_mensile_Impianto').hide();
-                $('#div_orario_Impianto').show();
-
-            } else {
-                $('#div_annuale_Impianto').hide();
-                $('#div_mensile_Impianto').hide();
-                $('#div_orario_Impianto').hide();
-            }
-        }
-
-
-        function sendMonthsValue() {
-
-
-            var formData = {
-                Gennaio: $('#Consumo_Genn').val(),
-                Febbraio: $('#Consumo_Feb').val(),
-                Marzo: $('#Consumo_Marzo').val(),
-                Aprile: $('#Consumo_Apr').val(),
-                Maggio: $('#Consumo_Maggio').val(),
-                Giugno: $('#Consumo_Giu').val(),
-                Luglio: $('#Consumo_Lug').val(),
-                Agosto: $('#Consumo_Ago').val(),
-                Settembre: $('#Consumo_Set').val(),
-                Ottobre: $('#Consumo_Ott').val(),
-                Novembre: $('#Consumo_Nov').val(),
-                Dicembre: $('#Consumo_Dic').val()
-            };
-
-            $.ajax({
-                type: 'POST',
-                url: 'DatiUtenze/SaveMonths',
-                data: formData,
-                success: function (data) {
-
-                },
-                error: function () {
-
-                    // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
-                }
-            });
-        }
-
-
-        function sendSelectedUtenze() {
-            var Forma_Utenza = document.getElementById("Forma_Utenza").value;
-            var N_Cluster = document.getElementById("n_utenze").value;
-            var Tipo_Utenza = document.getElementById("Tipo_Utenza").value;
-            var modalita_inserimento = document.getElementById("modalita_inserimento").value;
-
-            var formData = {
-                Forma_Utenza: Forma_Utenza,
-                N_Cluster: N_Cluster,
-                Tipo_Utenza: Tipo_Utenza,
-                Modalita_Inserimento: modalita_inserimento
-            };
-
-            $.ajax({
-                type: 'POST',
-                url: 'DatiUtenze/SaveDatiUtenze',
-                data: formData,
-                success: function (data) {
-                    console.log(data);
-                    if (data == '1') {
-                        window.location.href = '/DatiTecnici';
-                    } else {
-                        Swal.fire("Configurazione Completata", "", "success");
-                    }
-
-                },
-                error: function () {
-
-                    // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
-                }
-            });
-        }
-    </script>
-
-    <script>
-        // Date Picker
-        var Table_Consumer;
-        var Table_Prosumer;
-        var Table_Impianto;
-
-
-        jQuery('.mydatepicker, #datepicker, .input-group.date').datepicker(
-            {
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years"
-            }
-        );
-        jQuery('#datepicker-autoclose').datepicker({
-            autoclose: true,
-            todayHighlight: true
-        });
-        jQuery('#date-range').datepicker({
-            toggleActive: true
-        });
-        jQuery('#datepicker-inline').datepicker({
-            todayHighlight: true
-        });
-
-        $(document).ready(function () {
-            Table_Consumer = $('#grd_Consumer').DataTable({
-                "language":
-                {
-                    "url": url,
-                    "decimal": ',',
-                    "thousands": '.',
-
-                },
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        className: 'btn btn-info',
-                        title:  'Consumer',
-                        exportOptions: {
-                            format: {
-                                body: function (data, row, column, node) {
-                                    data = $('<p>' + data + '</p>').text().replace(' warning', '');
-                                    return $.isNumeric(data.replace(',', '.').replace('€', '')) ? data.replace(',', '.').replace('€', '') : data;
-                                }
-                            }
-
-
-                        }
-
-
-                    }
-                ],
-                "paging": true,
-                dom: 'Biflrtp',
-                "lengthMenu": [[-1, 10, 25, 50], ['Tutti', 10, 25, 50]],
-                "columnDefs":
-                    [
-                       /* {
-                            "targets": 'no-sort',
-                            "orderable": false,
-                        },
-                        {
-                            "targets": 2,
-                            "type": "date-eu"
-                        },
-                        {
-                            "targets": 3,
-                            "orderable": false
-                        },
-                        {
-                            "targets": 5,
-                            "visible": false
-                        }
-                        */
-
-                    ],
-                "columns": [
-                    { data: 'DESCRIZIONE' },
-                    { data: 'FORMA'},
-                    { data: 'TIPOLOGIA_UTENZA' },
-                    { data: 'NUMERO_UTENZE' },
-                    { data: 'MODALITA_INSERIMENTO' },
-                    { data: 'BTN' }
-
-                ]
-            });
-            Table_Prosumer = $('#grd_Prosumer').DataTable({
-                "language":
-                {
-                    "url": url,
-                    "decimal": ',',
-                    "thousands": '.',
-
-                },
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        className: 'btn btn-info',
-                        title: 'Consumer',
-                        exportOptions: {
-                            format: {
-                                body: function (data, row, column, node) {
-                                    data = $('<p>' + data + '</p>').text().replace(' warning', '');
-                                    return $.isNumeric(data.replace(',', '.').replace('€', '')) ? data.replace(',', '.').replace('€', '') : data;
-                                }
-                            }
-
-
-                        }
-
-
-                    }
-                ],
-                "paging": true,
-                dom: 'Biflrtp',
-                "lengthMenu": [[-1, 10, 25, 50], ['Tutti', 10, 25, 50]],
-                "columnDefs":
-                    [
-                       
-                    ],
-                "columns": [
-                    { data: 'DESCRIZIONE' },
-                    { data: 'FORMA' },
-                    { data: 'TIPOLOGIA_UTENZA' },
-                    { data: 'NUMERO_UTENZE' },
-                    { data: 'MODALITA_INSERIMENTO' },
-                    { data: 'BTN' }
-
-                ]
-            })
-            Table_Impianto = $('#grd_Impianto').DataTable({
-                "language":
-                {
-                    "url": url,
-                    "decimal": ',',
-                    "thousands": '.',
-
-                },
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        className: 'btn btn-info',
-                        title: 'Consumer',
-                        exportOptions: {
-                            format: {
-                                body: function (data, row, column, node) {
-                                    data = $('<p>' + data + '</p>').text().replace(' warning', '');
-                                    return $.isNumeric(data.replace(',', '.').replace('€', '')) ? data.replace(',', '.').replace('€', '') : data;
-                                }
-                            }
-
-
-                        }
-
-
-                    }
-                ],
-                "paging": true,
-                dom: 'Biflrtp',
-                "lengthMenu": [[-1, 10, 25, 50], ['Tutti', 10, 25, 50]],
-                "columnDefs":
-                    [
-
-                    ],
-                "columns": [
-                    { data: 'DESCRIZIONE' },
-                    { data: 'FORMA' },
-                    { data: 'TIPOLOGIA_UTENZA' },
-                    { data: 'NUMERO_UTENZE' },
-                    { data: 'MODALITA_INSERIMENTO' },
-                    { data: 'BTN' }
-
-                ]
-            })
-
-
-            
-        });
-
-        function ShowPopupConsumer() {
-            $('#centermodal_consumer').modal();
-            $('#div_annuale').hide();
-            $('#div_mensile').hide();
-            $('#div_orario').hide();
-
-
-        }
-
-
-        function ShowPopupProsumer() {
-            $('#centermodal_prosumer').modal();
-            $('#div_annuale_Prosumer').hide();
-            $('#div_mensile_Prosumer').hide();
-            $('#div_orario_Prosumer').hide();
-
-
-        }
-
-        function ShowPopupImpianto() {
-            $('#centermodal_impianto').modal();
-            $('#div_annuale_Impianto').hide();
-            $('#div_mensile_Impianto').hide();
-            $('#div_orario_Impianto').hide();
-        }
-
-        function ShowHideFinanziamentoProsumer() {
-            if ($('#CheckFinanziamentoProsumer').is(':checked') == false) {
-
-                $('#divFinanziamentoProsumer').hide();
-            } else {
-
-                $('#divFinanziamentoProsumer').show();
-            }
-        }
-        function ShowHideFinanziamentoImpianto() {
-            if ($('#CheckFinanziamentoImpianto').is(':checked') == false) {
-
-                $('#divFinanziamentoImpianto').hide();
-            } else {
-
-                $('#divFinanziamentoImpianto').show();
-            }
-        }
-        var type_
-        function ShowMap(t) {
-            type_ = t
-            $('#centermodalmap_prosumer').on('transitionend', function () { map.invalidateSize(); });
-
-
-            $('#centermodalmap_prosumer').modal();
-       
-        }
-
-        function InsertValues(){
-            if(type_ == 0){
-                $('#Latitudine_Prosumer').val(lat);
-                $('#Longitudine_Prosumer').val(lng);
-            }else{
-                $('#Latitudine_Impianto').val(lat);
-                $('#Longitudine_Impianto').val(lng);
-            }
-            $('#centermodalmap_prosumer').modal("hide");
-        }
-
-
-                function ContoChangeProsumer() {
-            if ($('#CheckContoProsumer').is(':checked') == false) {
-
-                $('#divContoProsumer').hide();
-            } else {
-
-                $('#divContoProsumer').show();
-            }
-        }
-
-        function ContoChangeImpianto() {
-            if ($('#CheckContoImpianto').is(':checked') == false) {
-
-                $('#divContoImpianto').hide();
-            } else {
-
-                $('#divContoImpianto').show();
-            }
-        }
-
-        function SwitchCostoVenditaProsumer() {
-            if ($('#check_vendita_prosumer').is(':checked') == false) {
-                $('#Modalita_libera_prosumer').hide();
-            } else {
-                $('#Modalita_libera_prosumer').show();
-            }
-
-
-        }
-        function SwitchCostoVenditaImpianto() {
-            if ($('#check_vendita_impianto').is(':checked') == false) {
-                $('#Modalita_libera_impianto').hide();
-            } else {
-                $('#Modalita_libera_impianto').show();
-            }
-        }
-
-        function SwitchCostoAcquistoProsumer() {
-
-            if ($('#check_acquisto_prosumer').is(':checked') == false) {
-                $('#Modalita_acquisto_prosumer').hide();
-            } else {
-                $('#Modalita_acquisto_prosumer').show();
-            }
-        }
-
-        function SwitchCostoAcquistoImpianto() {
-            if ($('#check_acquisto_impianto').is(':checked') == false) {
-                $('#Modalita_acquisto_impianto').hide();
-            } else {
-                $('#Modalita_acquisto_impianto').show();
-            }
-        }
-
-        function AddUtenza(Descrzione, Forma_Utenza, Tipologia_Utenza, Numero_Utenze, Modalita, Id_Consumer) {
-
-
-
-            var apo = String.fromCharCode(39);
-            myData = [
-                {
-                    "DESCRIZIONE": Descrzione,
-                    "FORMA": Forma_Utenza,
-                    "TIPOLOGIA_UTENZA": Tipologia_Utenza,
-                    "NUMERO_UTENZE": Numero_Utenze,
-                    "MODALITA_INSERIMENTO": Modalita,
-                    "BTN": '<button type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="SetIdFattura(' + apo + Id_Consumer + apo + ');$(' + apo + '#edit_costo_fatture' + apo + ').modal()"><i class="fas fa-pencil-alt"></i></button>        <button type="button" class="btn btn-sm btn-info mr-1" onclick="ShowDett(' + apo + Id_Consumer + apo + ')" ><i class="fas fa-eye"></i><button type="button" class="btn btn-sm mr-1 btn-info" onclick="AnteprimaFile(' + apo + id_fattura + apo + ')" ><i class="fas fa-search-plus"></i></button><button type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="GetDett(' + apo + id_fattura + apo + ')"><i class="fas fa-arrow-right"></i></button><button type="button" id="btn_cancella%ID%" name="btn" onclick="SetIdFattura(' + apo + Id_Consumer + apo + ')" id="sa-confirm" class="btn btn-sm ml-1 btn-danger cancel2"><i class="fas fa-trash-alt"></i></button>'
-                    //     "input": '  <button type="button" class="btn btn-sm btn-info mr-1" onclick="SetId('+apo+id+apo+')" ><i class="fas fa-pencil-alt"></i></button>'+'<button type="button" id="sa-confirm" onclick="Delete('+apo+id+apo+')" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>',
-                }
-
-            ];
-
-
-
-
-
-            FtableFatture.rows.add(myData);
-
-
-
-        }
-        $(".tab-wizard").steps({
-            headerTag: "h6",
-            bodyTag: "section",
-            transitionEffect: "fade",
-            titleTemplate: '<span class="step">#index#</span> #title#',
-            labels: {
-                finish: "Submit"
-            },
-            onFinished: function (event, currentIndex) {
-                swal("Form Submitted!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.");
-
-            }
-        });
-
-
-    </script>
-
-    <script>
-        var rinnovabile_Prosumer = 0;
-        var sezione2_Prosumer = 0;
-        var costoTot_Prosumer = 0;
-
-        var rinnovabile_Impianto = 0;
-        var sezione2_Impiantor = 0;
-        var costoTot_Impianto = 0;
-
-        $("#mod_Prosumer").bootstrapSwitch();
-
-        $(document).ready(function () {
-            $('#div_rinnovabile_Prosumer').hide();
-            $('#sezione2_Prosumer').hide();
-            $('#divCostoTot_Prosumer').hide();
-        });
-
-        function ShowRinnovabile_Prosumer() {
-
-            if ($('#customCheck1_Prosumer').is(':checked') == false) {
-                rinnovabile_Prosumer = 0;
-                $('#div_rinnovabile_Prosumer').hide();
-            } else {
-                rinnovabile_Prosumer = 1;
-                $('#div_rinnovabile_Prosumer').show();
-            }
-
-
-        }
-        function ShowSezione2_Prosumer() {
-
-            if ($('#customCheck2_Prosumer').is(':checked') == false) {
-                sezione2_Prosumer = 0;
-                $('#sezione2_Prosumer').hide();
-            } else {
-                sezione2_Prosumer = 1;
-                $('#sezione2_Prosumer').show();
-            }
-
-
-        }
-
-        function SwitchCosto_Prosumer() {
-
-            if ($('#mod_Prosumer').is(':checked') == true) {
-                costoTot_Prosumer = 0;
-                $('#divCostoTot_Prosumer').hide();
-                $('#divCostokW_Prosumer').show();
-            } else {
-                costoTot_Prosumer = 1;
-                $('#divCostoTot_Prosumer').show();
-                $('#divCostokW_Prosumer').hide();
-            }
-
-
-        }
-
-
-        $("#mod_Impianto").bootstrapSwitch();
-
-        $(document).ready(function () {
-            $('#div_rinnovabile_Impianto').hide();
-            $('#sezione2_Impianto').hide();
-            $('#divCostoTot_Impianto').hide();
-        });
-
-        function ShowRinnovabile_Impianto() {
-
-            if ($('#customCheck1_Impianto').is(':checked') == false) {
-                rinnovabile_Impianto = 0;
-                $('#div_rinnovabile_Impianto').hide();
-            } else {
-                rinnovabile_Impianto = 1;
-                $('#div_rinnovabile_Impianto').show();
-            }
-
-
-        }
-        function ShowSezione2_Impianto() {
-
-            if ($('#customCheck2_Impianto').is(':checked') == false) {
-                sezione2_Impianto = 0;
-                $('#sezione2_Impianto').hide();
-            } else {
-                sezione2_Impianto = 1;
-                $('#sezione2_Impianto').show();
-            }
-
-
-        }
-
-        function SwitchCosto_Impianto() {
-
-            if ($('#mod_Impianto').is(':checked') == true) {
-                costoTot_Impianto = 0;
-                $('#divCostoTot_Impianto').hide();
-                $('#divCostokW_Impianto').show();
-            } else {
-                costoTot_Impianto = 1;
-                $('#divCostoTot_Impianto').show();
-                $('#divCostokW_Impianto').hide();
-            }
-
-
-        }
-
-        function ShowDettaglio(values){
-            if(values==0){
-                $('#approfondimento_prosumer').modal('show');
-            }else{
-                $('#approfondimento_impianto').modal('show');
-            }
-        }
-     </script>
     <script src="../dist/js/app-style-switcher.horizontal.js"></script>
+    <script src="../../dist/js/Microd/dati_utenze.js"></script>
 
     <!-- My Js File-->
     <!-- <script src="../dist/js/DashboardJs/dashboard.js"></script> -->

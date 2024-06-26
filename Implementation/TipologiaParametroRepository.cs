@@ -1,6 +1,7 @@
 ﻿using Dashboard.BusinessLayer;
 using Dashboard.Database;
 using Dashboard.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dashboard.Implementation
 {
@@ -13,7 +14,7 @@ namespace Dashboard.Implementation
             _dbContext = dbContext;
         }
 
-        public TipologiaParametro GetById(int tipologiaId)
+        public async Task<TipologiaParametro> GetById(int tipologiaId)
         {
             return _dbContext.TipologiaParametro.Find(tipologiaId);
         }
@@ -31,12 +32,12 @@ namespace Dashboard.Implementation
             return true;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             var tipologia = GetById(id);
             if (tipologia != null)
             {
-                _dbContext.TipologiaParametro.Remove(tipologia);
+                _dbContext.TipologiaParametro.ExecuteDelete();
                 _dbContext.SaveChanges();
             }
             return true;

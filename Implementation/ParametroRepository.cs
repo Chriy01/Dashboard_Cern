@@ -20,20 +20,15 @@ namespace Dashboard.Implementation
             _dbContext.SaveChanges();
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var parametro = GetById(id);
+            var parametro = await GetById(id);
             if (parametro != null)
             {
-                _dbContext.Parametro.Remove(parametro);
+                //_dbContext.Parametro.Remove());
                 _dbContext.SaveChanges();
             }
             return true;
-        }
-
-        public Parametro GetById(int id)
-        {
-            return _dbContext.Parametro.Find(id);
         }
 
         public bool Update(Parametro entity)
@@ -41,6 +36,11 @@ namespace Dashboard.Implementation
             _dbContext.Parametro.Update(entity);
             _dbContext.SaveChanges();
             return true;
+        }
+
+        public async Task<Parametro> GetById(int id)
+        {
+            return _dbContext.Parametro.Find(id);
         }
     }
 }

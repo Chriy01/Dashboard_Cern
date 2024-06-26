@@ -11,6 +11,11 @@ namespace Dashboard.Implementation
         private TipologiaParametroRepository _tipologiaParametroRepository;
         private ComunitaRepository _comunitaRepository;
         private UtenteRepository _utenteRepository;
+        private Utente_ComunitaRepository _utente_comunitaRepository;
+        private Tipo_UtenzaRepository _tipoutenzaRepository;
+        private ConsumerRepository _consumerRepository;
+        private ProsumerRepository _prosumerRepository;
+        private ImpiantoRepository _impiantoRepository;
         public DatabaseService(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -53,6 +58,52 @@ namespace Dashboard.Implementation
                 if (_comunitaRepository == null)
                     _comunitaRepository = new ComunitaRepository(_dbContext);
                 return _comunitaRepository;
+            }
+        }
+
+        public Utente_ComunitaRepository Utente_ComunitaRepository
+        {
+            get
+            {
+                if (_utente_comunitaRepository == null)
+                    _utente_comunitaRepository = new Utente_ComunitaRepository(_dbContext);
+                return _utente_comunitaRepository;
+            }
+        }
+        public Tipo_UtenzaRepository Tipo_UtenzaRepository
+        {
+            get
+            {
+                if (_tipoutenzaRepository == null)
+                    _tipoutenzaRepository = new Tipo_UtenzaRepository(_dbContext);
+                return _tipoutenzaRepository;
+            }
+        }
+        public ConsumerRepository ConsumerRepository
+        {
+            get
+            {
+                if (_consumerRepository == null)
+                    _consumerRepository = new ConsumerRepository(_dbContext);
+                return _consumerRepository;
+            }
+        }
+        public ProsumerRepository ProsumerRepository
+        {
+            get
+            {
+                if (_prosumerRepository == null)
+                    _prosumerRepository = new ProsumerRepository(_dbContext);
+                return _prosumerRepository;
+            }
+        }
+        public ImpiantoRepository ImpiantoRepository
+        {
+            get
+            {
+                if (_impiantoRepository == null)
+                    _impiantoRepository = new ImpiantoRepository(_dbContext);
+                return _impiantoRepository;
             }
         }
 

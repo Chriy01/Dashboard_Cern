@@ -1,10 +1,11 @@
 ﻿using Dashboard.BusinessLayer;
 using Dashboard.Database;
 using Dashboard.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dashboard.Implementation
 {
-    public class ComunitaRepository : IBaseRepositable<Comunita>
+    public class ComunitaRepository : BaseRepository, IBaseRepositable<Comunita>
     {
         private readonly AppDbContext _dbContext;
 
@@ -13,13 +14,21 @@ namespace Dashboard.Implementation
             _dbContext = dbContext;
         }
 
-        public Comunita GetById(int comunitaId)
+        public async Task<Comunita> GetById(int id)
         {
-            return _dbContext.Comunita.Find(comunitaId);
-        }
-        Comunita IBaseRepositable<Comunita>.GetById(int id)
-        {
-            return _dbContext.Comunita.Find(id);
+            try
+            {
+                var com = _dbContext.Comunita.Where(c => c.Comunita_Id == id && c != null).SingleOrDefault();
+                return com;
+                // Operazioni aggiuntive...
+            }
+            catch (Exception ex)
+            {
+                // Registra l'errore o gestiscilo di conseguenza
+                Console.WriteLine($"Si è verificato un errore durante l'esecuzione della query: {ex.Message}");
+                return null;
+            }
+
         }
 
         public void Add(Comunita entity)
@@ -35,9 +44,9 @@ namespace Dashboard.Implementation
             return true;
         }
 
-        bool IBaseRepositable<Comunita>.Delete(int id)
+         async Task<bool> IBaseRepositable<Comunita>.Delete(int id)
         {
-            var comunita = GetById(id);
+            var comunita = await GetById(id);
             if (comunita != null)
             {
                 _dbContext.Comunita.Remove(comunita);

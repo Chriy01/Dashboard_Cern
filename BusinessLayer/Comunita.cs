@@ -7,9 +7,9 @@
         public int Anno_di_riferimento { get; set; }
         public bool IsPersonalizzato { get; set; }
         public string Zona_di_mercato { get; set; }
-        public bool IsComunita { get; set; }
-        public double Tasso_inflazione_mercato { get; set; }
-        public double Tasso_interesse_mercato { get; set; }
-        public string Zona_geografica { get; set; }
+        public bool iscomunita { get; set; }
+        public double tasso_inflazione_mercato { get; set; }
+        public double tasso_interesse_mercato { get; set; }
+        public string zona_geografica { get; set; }
     }
 }
