@@ -4,6 +4,7 @@ var lng
 var map = L.map('map').setView([41.8903, 12.4922], 13);
 var consumer_id;
 var prosumer_id;
+var impianto_id;
 // Aggiungi il layer delle mappe di OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -137,9 +138,9 @@ function sendMonthsValue() {
             Swal.fire("Salvataggio Effettuato", "", "success");
             Table_Consumer.clear().draw(true);
             _GetTableConsumer();
+     
 
-            // Imposta un timer per ricaricare la pagina dopo 5 secondi (5000 millisecondi)
-            setTimeout(reloadPage, 150);
+           
         },
         error: function () {
 
@@ -338,6 +339,7 @@ $(document).ready(function () {
 
             }
         ],
+
         "paging": true,
         dom: 'Biflrtp',
         "lengthMenu": [[-1, 10, 25, 50], ['Tutti', 10, 25, 50]],
@@ -376,6 +378,7 @@ function ShowPopupProsumer() {
     $('#div_annuale_Prosumer').hide();
     $('#div_mensile_Prosumer').hide();
     $('#div_orario_Prosumer').hide();
+    prosumer_id = -1;
 
 
 }
@@ -385,6 +388,7 @@ function ShowPopupImpianto() {
     $('#div_annuale_Impianto').hide();
     $('#div_mensile_Impianto').hide();
     $('#div_orario_Impianto').hide();
+    impianto_id = -1;
 }
 
 function ShowHideFinanziamentoProsumer() {
@@ -491,7 +495,10 @@ $(".tab-wizard").steps({
         finish: "Salva"
     },
     onFinished: function (event, currentIndex) {
-        console.log("YAS");
+        saveGeneralProsumer();
+        saveDatiImpiantoProsumer();
+        saveDatiEconomiciProsumer();
+        location.reload();
 
     }
 });
@@ -504,8 +511,10 @@ $(".tab-wizard2").steps({
         finish: "Salva"
     },
     onFinished: function (event, currentIndex) {
-        swal("Form Submitted!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.");
-
+        saveGeneralImpianto();
+        saveDatiImpiantoImpianto();
+        saveDatiEconomiciImpianto();
+        
     }
 });
 
@@ -765,10 +774,258 @@ function AddConsumer(Nome, Forma_Utenza, Tipo_Utenza, N_Utenze_Cluster,Modalita,
 }
 
 
+function ModiProsumer(id) {
+    var formData = {
+        id: id
+    };
+    prosumer_id = id;
+    $.ajax({
+        url: 'datiutenze/ModificaProsumer',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+
+            console.log(item);
+            $('#Forma_Utenza_Prosumer').val(item.forma_Utenza);
+            $('#Tipo_Utenza_Prosumer').val(item.tipo_Utenza_Id)
+            $('#n_utenze_Prosumer').val(item.n_Utenze_Cluster);
+            console.log("pippo");
+            console.log(item.modalita_inserimento);
+            $('#modalita_inserimento_Prosumer').val(item.modalita_Inserimento);
+            ShowCol();
+            $("#Consumo_Annuale_Prosumer").val(item.consumo_Annuale);
+            $('#Consumo_Genn').val(item.consumo_Gennaio);
+            $('#Consumo_Feb').val(item.consumo_Febbraio);
+            $('#Consumo_Marzo').val(item.consumo_Marzo);
+            $('#Consumo_Apr').val(item.consumo_Aprile);
+            $('#Consumo_Maggio').val(item.consumo_Maggio);
+            $('#Consumo_Giu').val(item.consumo_Giugno);
+            $('#Consumo_Lug').val(item.consumo_Luglio);
+            $('#Consumo_Ago').val(item.consumo_Agosto);
+            $('#Consumo_Set').val(item.consumo_Settembre);
+            $('#Consumo_Ott').val(item.consumo_Ottobre);
+            $('#Consumo_Nov').val(item.consumo_Novembre);
+            $('#Consumo_Dic').val(item.consumo_Dicembre);
+            $('#nome_prosumer').val(item.descrizione);
+
+            ModiImpiantoProsumer(prosumer_id);
+            ModiEconomiciProsumer(prosumer_id);
+            $("#centermodal_prosumer").modal("show");
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+
+function ModiImpiantoProsumer(id) {
+    var formData = {
+        id: id
+    };
+    consumer_id = id;
+    $.ajax({
+        url: 'datiutenze/ModificaProsumerImpianto',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+
+            console.log(item);
+            $('#Longitudine_Prosumer').val(item.longitudine);
+            $('#Latitudine_Prosumer').val(item.latitudine);
+            $('#Potenza_impianto_Prosumer').val(item.potenza_Impianto);
+            $('#Quota_Potenza_Rinnovabile_Prosumer').val(item.quota_Potenza_Rinnovabile);
+            $('#Potenza_inverter_Prosumer').val(item.potenza_Inverter);
+            $('#Costo_Impianto_Prosumer').val(item.costo_Impianto);
+            $('#Capacita_Batteria_Prosumer').val(item.capacita_Batteria);
+            $('#Is_Costo_KW_Prosumer').prop('checked', item.is_Costo_KW);
+            $('#Costo_Totale_Prosumer').val(item.costo_Totale);
+            $('#Costo_KW_Prosumer').val(item.costo_KW);
+            $('#Is_Escluso_Premio_Prosumer').prop('checked', item.is_Escluso_Premio);            
+            $('#Area_Impianto_Prosumer').val(item.area_Impianto);
+            $('#Tipologia_Impianto_Prosumer').val(item.tipologia_Impianto);
+            $('#Data_Esercizio_Prosumer').val(item.data_Esercizio);
+            $('#Is_Seconda_Falda_Prosumer').prop('checked', item.is_Seconda_Falda);
+            $('#Potenza_Sezione_Prosumer').val(item.potenza_Sezione);
+            $('#Angolo_di_tilt_Prosumer').val(item.angolo_di_tilt);
+            $('#Angolo_di_Azimut_Prosumer').val(item.angolo_di_Azimut);
+            $('#Potenza_Sezione_S_Prosumer').val(item.potenza_Sezione_S);
+            $('#Angolo_di_tilt_S_Prosumer').val(item.angolo_di_tilt_S);
+            $('#Angolo_di_Azimut_S_Prosumer').val(item.angolo_di_Azimut_S);
+            $('#Efficienza_Prosumer').val(item.efficienza);
+            $('#Coefficiente_T_Prosumer').val(item.coefficiente_T);
+            $('#NOCT_Prosumer').val(item.noct);
+            $('#Fattore_Riduzione_Prosumer').val(item.fattore_Riduzione);
+            $('#Efficienza_Inverter_Prosumer').val(item.efficienza_Inverter);
+            $('#Costo_Ricambio_Batt_Prosumer').val(item.costo_Ricambio_Batt);
+            $('#Altre_Perdite_Prosumer').val(item.altre_Perdite);
+
+            $('#checkTariffa_Prosumer').prop('checked', item.is_Escluso_Premio);
+            $('#mod_Prosumer').prop('checked', item.is_Costo_KW);
+            $('#customCheck1_Prosumer').prop('checked', item.is_Abilitato_Rinnovabile);
+            $('#customCheck2_Prosumer').prop('checked', item.is_Seconda_Falda);
+            
+            ShowRinnovabile_Prosumer();
+            SwitchCosto_Prosumer();
+            ShowSezione2_Prosumer();
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+
+function ModiEconomiciProsumer(id) {
+    var formData = {
+        id: id
+    };
+    consumer_id = id;
+    $.ajax({
+        url: 'datiutenze/ModificaProsumerEconomici',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+
+            console.log(item);
+            $('#check_vendita_prosumer').prop('checked', item.modalita_Vendita === 1);
+            $('#check_acquisto_prosumer').prop('checked', item.modalita_Acquisto === 1);
+            $('#DetrazioneProsumer').prop('checked', item.is_Detrazione);
+            $('#CheckFinanziamentoProsumer').prop('checked', item.is_Finanziamento);
+            $('#CheckContoProsumer').prop('checked', item.is_Conto);
+            $('#Tipo_Utenza_Economica_Prosumer').val(item.tipo_Utenza_Id);
+            $('#PUN_F1_PRE_PRO').val(item.prezzo_F1);
+            $('#PUN_F2_PRE_PRO').val(item.prezzo_F2);
+            $('#PUN_F3_PRE_PRO').val(item.prezzo_F3);
+            $('#PUN_F1_COSTO_PRO').val(item.costo_F1);
+            $('#PUN_F2_COSTO_PRO').val(item.costo_F2);
+            $('#PUN_F3_COSTO_PRO').val(item.costo_F3);
+            $('#AltreSpeseInvestmentProsumer').val(item.altre_Spese_Investimento);
+            $('#AltreSpeseProsumer').val(item.altre_Spese);
+            $('#AltreSpeseAnnoProsumer').val(item.spese_Manutenzione);
+            $('#FinanziamentoProsumer').val(item.importo_Finanziamento);
+            $('#IntersseFinanziamentoProsumer').val(item.interesse_Finanziamento);
+            $('#PercentFinanziamentoProsumer').val(item.conto_Capitale);
+            SwitchCostoAcquistoProsumer();
+            SwitchCostoVenditaProsumer();
+            ShowHideFinanziamentoProsumer();
+            ContoChangeProsumer();
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+
+
+function AddProsumer(Nome, Forma_Utenza, Tipo_Utenza, N_Utenze_Cluster, Modalita, Btn) {
+
+    console.log(Nome);
+
+    var apo = String.fromCharCode(39);
+    myData = [
+        {
+            "DESCRIZIONE": Nome,
+            "FORMA": Forma_Utenza,
+            "TIPOLOGIA_UTENZA": Tipo_Utenza,
+            "NUMERO_UTENZE": N_Utenze_Cluster,
+            "MODALITA_INSERIMENTO": Modalita,
+            "BTN": Btn
+        }
+
+    ];
+
+
+
+
+    Table_Prosumer.rows.add(myData);
+
+}
+
+function ModiImpianto(id) {
+    var formData = {
+        id: id
+    };
+    consumer_id = id;
+    $.ajax({
+        url: 'datiutenze/ModificaImpianto',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+
+            console.log(item);
+            $('#Forma_Utenza_Impianto').val(item.forma_Utenza);
+            $('#Tipo_Utenza_Impianto').val(item.tipo_Utenza_Id)
+            $('#n_utenze_Impianto').val(item.n_Utenze_Cluster);
+            console.log("pippo");
+            console.log(item.modalita_inserimento);
+            $('#modalita_inserimento_Impianto').val(item.modalita_Inserimento);
+            ShowCol();
+            $("#Consumo_Annuale_Impianto").val(item.consumo_Annuale);
+            $("#Consumo_Annuale_Impianto").val(item.consumo_Annuale);
+            $('#Consumo_Genn').val(item.consumo_Gennaio);
+            $('#Consumo_Feb').val(item.consumo_Febbraio);
+            $('#Consumo_Marzo').val(item.consumo_Marzo);
+            $('#Consumo_Apr').val(item.consumo_Aprile);
+            $('#Consumo_Maggio').val(item.consumo_Maggio);
+            $('#Consumo_Giu').val(item.consumo_Giugno);
+            $('#Consumo_Lug').val(item.consumo_Luglio);
+            $('#Consumo_Ago').val(item.consumo_Agosto);
+            $('#Consumo_Set').val(item.consumo_Settembre);
+            $('#Consumo_Ott').val(item.consumo_Ottobre);
+            $('#Consumo_Nov').val(item.consumo_Novembre);
+            $('#Consumo_Dic').val(item.consumo_Dicembre);
+            $('#nome_impianto').val(item.descrizione);
+
+
+            $("#centermodal_Impianto").modal("show");
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+
+function AddImpianto(Nome, Forma_Utenza, Tipo_Utenza, N_Utenze_Cluster, Modalita, Btn) {
+
+    console.log(Nome);
+
+    var apo = String.fromCharCode(39);
+    myData = [
+        {
+            "DESCRIZIONE": Nome,
+            "FORMA": Forma_Utenza,
+            "TIPOLOGIA_UTENZA": Tipo_Utenza,
+            "NUMERO_UTENZE": N_Utenze_Cluster,
+            "MODALITA_INSERIMENTO": Modalita,
+            "BTN": Btn
+        }
+
+    ];
+
+
+
+
+    Table_Impianto.rows.add(myData);
+
+}
+
 $(document).ready(function () {
     // Effettua una chiamata AJAX al controller
     GetSelectTipo_Utenza(-1);
-    _GetTableConsumer()
+    _GetTableConsumer();
+    _GetTableProsumer();
+    _GetTableImpianto();
 });
 
 function _GetTableConsumer() {
@@ -831,7 +1088,163 @@ function _GetTableConsumer() {
         }
     });
 }
+function _GetTableProsumer() {
+    $.ajax({
+        url: 'DatiUtenze/GetTableProsumer',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+            response.forEach(function (item) {
+                console.log(item);
+                AddProsumer(item.nome, item.formautenza, item.tipoutenza, item.nutenzecluster, item.modalita, item.btn)
+            });
+            Table_Prosumer.draw(true);
+            ! function ($) {
+                "use strict";
 
+                var SweetAlert = function () { };
+
+                SweetAlert.prototype.init = function () {
+
+                    $(".btncancelProsumer").click(function () {
+                        Swal.fire({
+                            title: "Sei sicuro di voler cancellare?",
+                            text: "",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#1aa33f',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: "Conferma",
+                            cancelButtonText: "Annulla"
+                        }).then((result) => {
+                            if (result.value) {
+                                _DeleteProsumer();
+                                Table_Prosumer.clear().draw(true);
+
+                                Swal.fire(
+                                    "Cancellato",
+                                    '',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+
+                },
+                    //init
+                    $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert
+            }(window.jQuery),
+
+                //initializing 
+                function ($) {
+                    "use strict";
+                    $.SweetAlert.init()
+                }(window.jQuery);
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+function _GetTableImpianto() {
+    $.ajax({
+        url: 'DatiUtenze/GetTableImpianto',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+            response.forEach(function (item) {
+                console.log(item);
+                AddImpianto(item.nome, item.formautenza, item.tipoutenza, item.nutenzecluster, item.modalita, item.btn)
+            });
+            Table_Impianto.draw(true);
+            ! function ($) {
+                "use strict";
+
+                var SweetAlert = function () { };
+
+                SweetAlert.prototype.init = function () {
+
+                    $(".btncancelImpianto").click(function () {
+                        Swal.fire({
+                            title: "Sei sicuro di voler cancellare?",
+                            text: "",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#1aa33f',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: "Conferma",
+                            cancelButtonText: "Annulla"
+                        }).then((result) => {
+                            if (result.value) {
+                                _DeleteImpianto();
+                                Table_Impianto.clear().draw(true);
+
+                                Swal.fire(
+                                    "Cancellato",
+                                    '',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+
+                },
+                    //init
+                    $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert
+            }(window.jQuery),
+
+                //initializing 
+                function ($) {
+                    "use strict";
+                    $.SweetAlert.init()
+                }(window.jQuery);
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+function _SetIdProsumer(id) {
+    var formData = {
+        id: id
+    };
+    prosumer_id = id;
+    $.ajax({
+        url: 'datiutenze/SetIdProsumer',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+
+function _DeleteProsumer() {
+    console.log(prosumer_id);
+    var formData = {
+        id: prosumer_id
+    };
+    $.ajax({
+        url: 'datiutenze/DeleteProsumer',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+            _GetTableProsumer();
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
 
 function saveGeneralProsumer() {
 
@@ -842,20 +1255,20 @@ function saveGeneralProsumer() {
         n_utenze: $('#n_utenze_Prosumer').val(),
         modalita_inserimento: $('#modalita_inserimento_Prosumer').val(),
         consumo_annuale: $("#Consumo_Annuale_Prosumer").val(),
-        gennaio: $('#Consumo_Genn_Prosumer').val(),
-        Febbraio: $('#Consumo_Feb_Prosumer').val(),
-        Marzo: $('#Consumo_Marzo_Prosumer').val(),
-        Aprile: $('#Consumo_Apr_Prosumer').val(),
-        Maggio: $('#Consumo_Maggio_Prosumer').val(),
-        Giugno: $('#Consumo_Giu_Prosumer').val(),
-        Luglio: $('#Consumo_Lug_Prosumer').val(),
-        Agosto: $('#Consumo_Ago_Prosumer').val(),
-        Settembre: $('#Consumo_Set_Prosumer').val(),
-        Ottobre: $('#Consumo_Ott_Prosumer').val(),
-        Novembre: $('#Consumo_Nov_Prosumer').val(),
-        Dicembre: $('#Consumo_Dic_Prosumer').val(),
-        Descrizione: $('#nome_consumer_prosumer').val(),
-        consumer_id: consumer_id
+        gennaio: $('#Consumo_Genn').val(),
+        Febbraio: $('#Consumo_Feb').val(),
+        Marzo: $('#Consumo_Marzo').val(),
+        Aprile: $('#Consumo_Apr').val(),
+        Maggio: $('#Consumo_Maggio').val(),
+        Giugno: $('#Consumo_Giu').val(),
+        Luglio: $('#Consumo_Lug').val(),
+        Agosto: $('#Consumo_Ago').val(),
+        Settembre: $('#Consumo_Set').val(),
+        Ottobre: $('#Consumo_Ott').val(),
+        Novembre: $('#Consumo_Nov').val(),
+        Dicembre: $('#Consumo_Dic').val(),
+        Descrizione: $('#nome_prosumer').val(),
+        prosumer_id: prosumer_id
     };
 
     $.ajax({
@@ -865,10 +1278,9 @@ function saveGeneralProsumer() {
         success: function (data) {
             Swal.fire("Salvataggio Effettuato", "", "success");
             Table_Prosumer.clear().draw(true);
-            //_GetTableConsumer();
+            _GetTableProsumer();
 
-            // Imposta un timer per ricaricare la pagina dopo 5 secondi (5000 millisecondi)
-            setTimeout(reloadPage, 150);
+            
         },
         error: function () {
 
@@ -944,10 +1356,82 @@ function saveDatiImpiantoProsumer() {
         success: function (data) {
             Swal.fire("Salvataggio Effettuato", "", "success");
             Table_Prosumer.clear().draw(true);
-            //_GetTableConsumer();
+            _GetTableProsumer();
 
             // Imposta un timer per ricaricare la pagina dopo 5 secondi (5000 millisecondi)
-            setTimeout(reloadPage, 150);
+            
+        },
+        error: function () {
+
+            // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
+        }
+    });
+}
+
+function saveDatiEconomiciProsumer() {
+    var checkVendita;
+    var checkAcquisto;
+    var isDetrazione;
+    var is_finanziamento;
+    var is_conto;
+    if ($('#check_vendita_prosumer').is(':checked') == false) {
+        checkVendita = 0;
+    } else {
+        checkVendita = 1;
+    }
+    if ($('#check_acquisto_prosumer').is(':checked') == false) {
+        checkAcquisto = 0;
+    } else {
+        checkAcquisto = 1;
+    }
+    if ($('#DetrazioneProsumer').is(':checked') == false) {
+        isDetrazione = 0;
+    } else {
+        isDetrazione = 1;
+    }
+    if ($('#CheckFinanziamentoProsumer').is(':checked') == false) {
+        is_finanziamento = 0;
+    } else {
+        is_finanziamento = 1;
+    }
+    if ($('#CheckContoProsumer').is(':checked') == false) {
+        is_conto = 0;
+    } else {
+        is_conto = 1;
+    }
+    var formData = {
+        isvendita: checkVendita,
+        isacquisto: checkAcquisto,
+        is_detrazione: isDetrazione,
+        isfinanziamento: is_finanziamento,
+        isconto: is_conto,
+        tipo_utente: $('#Tipo_Utenza_Economica_Prosumer').val(),
+        prezzo_f1: $('#PUN_F1_PRE_PRO').val(),
+        prezzo_f2: $('#PUN_F2_PRE_PRO').val(),
+        prezzo_f3: $('#PUN_F3_PRE_PRO').val(),
+        costo_f1: $('#PUN_F1_COSTO_PRO').val(),
+        costo_f2: $('#PUN_F2_COSTO_PRO').val(),
+        costo_f3: $('#PUN_F3_COSTO_PRO').val(),
+        altre_spese_inv: $('#AltreSpeseInvestmentProsumer').val(),
+        altre_spese: $('#AltreSpeseProsumer').val(),
+        spese_man: $('#AltreSpeseAnnoProsumer').val(),
+        finanziamento: $('#FinanziamentoProsumer').val(),
+        interesse: $('#IntersseFinanziamentoProsumer').val(),
+        perce_finanziamento: $('#PercentFinanziamentoProsumer').val(),
+        prosumer_id: prosumer_id
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: 'DatiUtenze/SaveEconomiciProsumer',
+        data: formData,
+        success: function (data) {
+            Swal.fire("Salvataggio Effettuato", "", "success");
+            Table_Prosumer.clear().draw(true);
+            _GetTableProsumer();
+
+            // Imposta un timer per ricaricare la pagina dopo 5 secondi (5000 millisecondi)
+         
         },
         error: function () {
 
@@ -965,20 +1449,20 @@ function saveGeneralImpianto() {
         n_utenze: $('#n_utenze_Impianto').val(),
         modalita_inserimento: $('#modalita_inserimento_Impianto').val(),
         consumo_annuale: $("#Consumo_Annuale_Impianto").val(),
-        gennaio: $('#Consumo_Genn_Impianto').val(),
-        Febbraio: $('#Consumo_Feb_Impianto').val(),
-        Marzo: $('#Consumo_Marzo_Impianto').val(),
-        Aprile: $('#Consumo_Apr_Impianto').val(),
-        Maggio: $('#Consumo_Maggio_Impianto').val(),
-        Giugno: $('#Consumo_Giu_Impianto').val(),
-        Luglio: $('#Consumo_Lug_Impianto').val(),
-        Agosto: $('#Consumo_Ago_Impianto').val(),
-        Settembre: $('#Consumo_Set_Impianto').val(),
-        Ottobre: $('#Consumo_Ott_Impianto').val(),
-        Novembre: $('#Consumo_Nov_Impianto').val(),
-        Dicembre: $('#Consumo_Dic_Impianto').val(),
-        Descrizione: $('#nome_consumer_impianto').val(),
-        consumer_id: consumer_id
+        gennaio: $('#Consumo_Genn').val(),
+        Febbraio: $('#Consumo_Feb').val(),
+        Marzo: $('#Consumo_Marzo').val(),
+        Aprile: $('#Consumo_Apr').val(),
+        Maggio: $('#Consumo_Maggio').val(),
+        Giugno: $('#Consumo_Giu').val(),
+        Luglio: $('#Consumo_Lug').val(),
+        Agosto: $('#Consumo_Ago').val(),
+        Settembre: $('#Consumo_Set').val(),
+        Ottobre: $('#Consumo_Ott').val(),
+        Novembre: $('#Consumo_Nov').val(),
+        Dicembre: $('#Consumo_Dic').val(),
+        Descrizione: $('#nome_impianto').val(),
+        impianto_id: impianto_id
     };
 
     $.ajax({
@@ -988,14 +1472,276 @@ function saveGeneralImpianto() {
         success: function (data) {
             Swal.fire("Salvataggio Effettuato", "", "success");
             Table_Impianto.clear().draw(true);
-            //_GetTableConsumer();
+            _GetTableImpianto();
 
-            // Imposta un timer per ricaricare la pagina dopo 5 secondi (5000 millisecondi)
-            setTimeout(reloadPage, 150);
+        
         },
         error: function () {
 
             // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
+        }
+    });
+}
+function saveDatiEconomiciImpianto() {
+    var checkVendita;
+    var checkAcquisto;
+    var isDetrazione;
+    var is_finanziamento;
+    var is_conto;
+    if ($('#check_vendita_impianto').is(':checked') == false) {
+        checkVendita = 0;
+    } else {
+        checkVendita = 1;
+    }
+    if ($('#check_acquisto_impianto').is(':checked') == false) {
+        checkAcquisto = 0;
+    } else {
+        checkAcquisto = 1;
+    }
+    if ($('#DetrazioneImpianto').is(':checked') == false) {
+        isDetrazione = 0;
+    } else {
+        isDetrazione = 1;
+    }
+    if ($('#CheckFinanziamentoImpianto').is(':checked') == false) {
+        is_finanziamento = 0;
+    } else {
+        is_finanziamento = 1;
+    }
+    if ($('#CheckContoImpianto').is(':checked') == false) {
+        is_conto = 0;
+    } else {
+        is_conto = 1;
+    }
+    var formData = {
+        isvendita: checkVendita,
+        isacquisto: checkAcquisto,
+        is_detrazione: isDetrazione,
+        isfinanziamento: is_finanziamento,
+        isconto: is_conto,
+        tipo_utente: $('#Tipo_Utenza_Economica_Impianto').val(),
+        prezzo_f1: $('#PUN_F1_PRE_IMP').val(),
+        prezzo_f2: $('#PUN_F2_PRE_IMP').val(),
+        prezzo_f3: $('#PUN_F3_PRE_IMP').val(),
+        costo_f1: $('#PUN_F1_COSTO_IMP').val(),
+        costo_f2: $('#PUN_F2_COSTO_IMP').val(),
+        costo_f3: $('#PUN_F3_COSTO_IMP').val(),
+        altre_spese_inv: $('#AltreSpeseInvestmentProsumer').val(),
+        altre_spese: $('#AltreSpeseProsumer').val(),
+        spese_man: $('#AltreSpeseAnnoProsumer').val(),
+        finanziamento: $('#FinanziamentoProsumer').val(),
+        interesse: $('#IntersseFinanziamentoProsumer').val(),
+        perce_finanziamento: $('#PercentFinanziamentoProsumer').val(),
+        impianto_id: impianto_id
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: 'DatiUtenze/SaveEconomiciProsumer',
+        data: formData,
+        success: function (data) {
+            Swal.fire("Salvataggio Effettuato", "", "success");
+            Table_Prosumer.clear().draw(true);
+            _GetTableProsumer();
+            location.reload();
+            // Imposta un timer per ricaricare la pagina dopo 5 secondi (5000 millisecondi)
+            
+        },
+        error: function () {
+
+            // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
+        }
+    });
+}
+    function _SetIdImpianto(id) {
+        var formData = {
+            id: id
+        };
+        impianto_id = id;
+        $.ajax({
+            url: 'datiutenze/SetIdImpianto',
+            type: 'GET',
+            data: formData,
+            success: function (item) {
+
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+                console.error("Errore durante la chiamata AJAX: " + error);
+            }
+        });
+    }
+
+
+function _DeleteImpianto() {
+    console.log(impianto_id);
+    var formData = {
+        id: impianto_id
+    };
+    $.ajax({
+        url: 'datiutenze/DeleteImpianto',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+            _GetTableImpianto();
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+function ModiImpianto(id) {
+    var formData = {
+        id: id
+    };
+    impianto_id = id;
+    $.ajax({
+        url: 'datiutenze/ModificaImpianto',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+
+            console.log(item);
+            $('#Forma_Utenza_Impianto').val(item.forma_Utenza);
+            $('#Tipo_Utenza_Impianto').val(item.tipo_Utenza_Id)
+            $('#n_utenze_Impianto').val(item.n_Utenze_Cluster);
+            console.log("pippo");
+            console.log(item.modalita_inserimento);
+            $('#modalita_inserimento_Impianto').val(item.modalita_Inserimento);
+            ShowCol();
+            $("#Consumo_Annuale_Impianto").val(item.consumo_Annuale);
+            $('#Consumo_Genn').val(item.consumo_Gennaio);
+            $('#Consumo_Feb').val(item.consumo_Febbraio);
+            $('#Consumo_Marzo').val(item.consumo_Marzo);
+            $('#Consumo_Apr').val(item.consumo_Aprile);
+            $('#Consumo_Maggio').val(item.consumo_Maggio);
+            $('#Consumo_Giu').val(item.consumo_Giugno);
+            $('#Consumo_Lug').val(item.consumo_Luglio);
+            $('#Consumo_Ago').val(item.consumo_Agosto);
+            $('#Consumo_Set').val(item.consumo_Settembre);
+            $('#Consumo_Ott').val(item.consumo_Ottobre);
+            $('#Consumo_Nov').val(item.consumo_Novembre);
+            $('#Consumo_Dic').val(item.consumo_Dicembre);
+            $('#nome_impianto').val(item.descrizione);
+
+            ModiImpiantoImpianto(Impianto_id);
+            ModiEconomiciImpianto(Impianto_id);
+            $("#centermodal_impianto").modal("show");
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+
+function ModiImpiantoImpianto(id) {
+    var formData = {
+        id: id
+    };
+    consumer_id = id;
+    $.ajax({
+        url: 'datiutenze/ModificaImpiantoImpianto',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+
+            console.log(item);
+            $('#Longitudine_Impianto').val(item.longitudine);
+            $('#Latitudine_Impianto').val(item.latitudine);
+            $('#Potenza_impianto_Impianto').val(item.potenza_Impianto);
+            $('#Quota_Potenza_Rinnovabile_Impianto').val(item.quota_Potenza_Rinnovabile);
+            $('#Potenza_inverter_Impianto').val(item.potenza_Inverter);
+            $('#Costo_Impianto_Impianto').val(item.costo_Impianto);
+            $('#Capacita_Batteria_Impianto').val(item.capacita_Batteria);
+            $('#Is_Costo_KW_Impianto').prop('checked', item.is_Costo_KW);
+            $('#Costo_Totale_Impianto').val(item.costo_Totale);
+            $('#Costo_KW_Impianto').val(item.costo_KW);
+            $('#Is_Escluso_Premio_Impianto').prop('checked', item.is_Escluso_Premio);
+            $('#Area_Impianto_Impianto').val(item.area_Impianto);
+            $('#Tipologia_Impianto_Impianto').val(item.tipologia_Impianto);
+            $('#Data_Esercizio_Impianto').val(item.data_Esercizio);
+            $('#Is_Seconda_Falda_Impianto').prop('checked', item.is_Seconda_Falda);
+            $('#Potenza_Sezione_Impianto').val(item.potenza_Sezione);
+            $('#Angolo_di_tilt_Impianto').val(item.angolo_di_tilt);
+            $('#Angolo_di_Azimut_Impianto').val(item.angolo_di_Azimut);
+            $('#Potenza_Sezione_S_Impianto').val(item.potenza_Sezione_S);
+            $('#Angolo_di_tilt_S_Impianto').val(item.angolo_di_tilt_S);
+            $('#Angolo_di_Azimut_S_Impianto').val(item.angolo_di_Azimut_S);
+            $('#Efficienza_Impianto').val(item.efficienza);
+            $('#Coefficiente_T_Impianto').val(item.coefficiente_T);
+            $('#NOCT_Impianto').val(item.noct);
+            $('#Fattore_Riduzione_Impianto').val(item.fattore_Riduzione);
+            $('#Efficienza_Inverter_Impianto').val(item.efficienza_Inverter);
+            $('#Costo_Ricambio_Batt_Impianto').val(item.costo_Ricambio_Batt);
+            $('#Altre_Perdite_Impianto').val(item.altre_Perdite);
+
+            $('#checkTariffa_Impianto').prop('checked', item.is_Escluso_Premio);
+            $('#mod_Impianto').prop('checked', item.is_Costo_KW);
+            $('#customCheck1_Impianto').prop('checked', item.is_Abilitato_Rinnovabile);
+            $('#customCheck2_Impianto').prop('checked', item.is_Seconda_Falda);
+
+            ShowRinnovabile_Impianto();
+            SwitchCosto_Impianto();
+            ShowSezione2_Impianto();
+
+
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+
+function ModiEconomiciImpianto(id) {
+    var formData = {
+        id: id
+    };
+    consumer_id = id;
+    $.ajax({
+        url: 'datiutenze/ModificaImpiantoImpianto',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+
+            console.log(item);
+            $('#check_vendita_impianto').prop('checked', item.modalita_Vendita === 1);
+            $('#check_acquisto_impianto').prop('checked', item.modalita_Acquisto === 1);
+            $('#DetrazioneImpianto').prop('checked', item.is_Detrazione);
+            $('#CheckFinanziamentoImpianto').prop('checked', item.is_Finanziamento);
+            $('#CheckContoImpinato').prop('checked', item.is_Conto);
+            $('#Tipo_Utenza_Economica_Impianto').val(item.tipo_Utenza_Id);
+            $('#PUN_F1_PRE_IMP').val(item.prezzo_F1);
+            $('#PUN_F2_PRE_IMP').val(item.prezzo_F2);
+            $('#PUN_F3_PRE_IMP').val(item.prezzo_F3);
+            $('#PUN_F1_COSTO_IMP').val(item.costo_F1);
+            $('#PUN_F2_COSTO_IMP').val(item.costo_F2);
+            $('#PUN_F3_COSTO_IMP').val(item.costo_F3);
+            $('#AltreSpeseInvestmentImpianto').val(item.altre_Spese_Investimento);
+            $('#AltreSpeseImpianto').val(item.altre_Spese);
+            $('#AltreSpeseAnnoImpianto').val(item.spese_Manutenzione);
+            $('#FinanziamentoImpianto').val(item.importo_Finanziamento);
+            $('#IntersseFinanziamentoImpianto').val(item.interesse_Finanziamento);
+            $('#PercentFinanziamentoImpianto').val(item.conto_Capitale);
+
+
+            SwitchCostoAcquistoImpianto();
+            SwitchCostoVenditaImpianto();
+            ShowHideFinanziamentoImpianto();
+            ContoChangeImpianto();
+
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
         }
     });
 }

@@ -121,10 +121,10 @@
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
-                                            <th>Potenza Impianto</th>
-                                            <th>Potenza Inverter</th>
-                                            <th>Data Inizio</th>
-                                            <th>Costo</th>
+                                            <th>Forma dell'Utenza</th>
+                                            <th>Tipologia Utenza</th>
+                                            <th>Numero di Utenze</th>
+                                            <th>Modalita Inserimento</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -156,10 +156,10 @@
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
-                                            <th>Potenza Impianto</th>
-                                            <th>Potenza Inverter</th>
-                                            <th>Data Inizio</th>
-                                            <th>Costo</th>
+                                            <th>Forma dell'Utenza</th>
+                                            <th>Tipologia Utenza</th>
+                                            <th>Numero di Utenze</th>
+                                            <th>Modalita Inserimento</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -545,7 +545,7 @@
 
                                                     <h4 class="card-title">Tipologia di Utenza</h4>
 
-                                                    <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Utenza_Prosumer">
+                                                    <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Utenza_Economica_Prosumer">
                                                         <option value="">Seleziona</option>
                                                         <option value="1">Residenziale</option>
                                                         <option value="2">Utenze in bassa tensione per l'illuminazione pubblica</option>
@@ -1062,7 +1062,7 @@
 
                                                     <h4 class="card-title">Tipologia di Utenza</h4>
 
-                                                    <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Utenza_Impianto">
+                                                    <select class="select2 form-control custom-select select2-hidden-accessible" id="Tipo_Utenza_Economica_Impianto">
                                                         <option value="">Seleziona</option>
                                                         <option value="1">Residenziale</option>
                                                         <option value="2">Utenze in bassa tensione per l'illuminazione pubblica</option>
@@ -1102,7 +1102,7 @@
                                                                 <div class="col-4">
                                                                     <label for="PUN_F1">Prezzo F1</label>
                                                                     <div class="input-group mb-3">
-                                                                        <input type="number" id="PUN_F1_PRE_PRO" class="form-control" value="0">
+                                                                        <input type="number" id="PUN_F1_PRE_IMP" class="form-control" value="0">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text">€/kWh</span>
                                                                         </div>
@@ -1111,7 +1111,7 @@
                                                                 <div class="col-4">
                                                                     <label for="Consumo_Giu">Prezzo F2</label>
                                                                     <div class="input-group mb-3">
-                                                                        <input type="number" id="PUN_F2_PRE_PRO" class="form-control" value="0">
+                                                                        <input type="number" id="PUN_F2_PRE_IMP" class="form-control" value="0">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text">€/kWh</span>
                                                                         </div>
@@ -1120,7 +1120,7 @@
                                                                 <div class="col-4">
                                                                     <label for="Consumo_Lug">Prezzo F3</label>
                                                                     <div class="input-group mb-3">
-                                                                        <input type="number" id="PUN_F3_PRE_PRO" class="form-control" value="0">
+                                                                        <input type="number" id="PUN_F3_PRE_IMP" class="form-control" value="0">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text">€/kWh</span>
                                                                         </div>
@@ -1156,7 +1156,7 @@
                                                                 <div class="col-4">
                                                                     <label for="PUN_F1">Costo F1</label>
                                                                     <div class="input-group mb-3">
-                                                                        <input type="number" id="PUN_F1_COSTO_PRO" class="form-control" value="0">
+                                                                        <input type="number" id="PUN_F1_COSTO_IMP" class="form-control" value="0">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text">€/kWh</span>
                                                                         </div>
@@ -1165,7 +1165,7 @@
                                                                 <div class="col-4">
                                                                     <label for="Consumo_Giu">Costo F2</label>
                                                                     <div class="input-group mb-3">
-                                                                        <input type="number" id="PUN_F2_COSTO_PRO" class="form-control" value="0">
+                                                                        <input type="number" id="PUN_F2_COSTO_IMP" class="form-control" value="0">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text">€/kWh</span>
                                                                         </div>
@@ -1174,7 +1174,7 @@
                                                                 <div class="col-4">
                                                                     <label for="Consumo_Lug">Costo F3</label>
                                                                     <div class="input-group mb-3">
-                                                                        <input type="number" id="PUN_F3_COSTO_PRO" class="form-control" value="0">
+                                                                        <input type="number" id="PUN_F3_COSTO_IMP" class="form-control" value="0">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text">€/kWh</span>
                                                                         </div>
@@ -1559,7 +1559,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success" onclick=""><i class="mdi"></i>Salva</button>
+                        <button class="btn btn-success" onclick="$('#approfondimento_prosumer').modal('hide')"><i class="mdi"></i>Conferma</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -1788,7 +1788,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success" onclick=""><i class="mdi"></i>Salva</button>
+                        <button class="btn btn-success" onclick="$('#approfondimento_impianto').modal('hide')"><i class="mdi"></i>Conferma</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->

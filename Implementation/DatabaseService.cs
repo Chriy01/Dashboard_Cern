@@ -16,6 +16,8 @@ namespace Dashboard.Implementation
         private ConsumerRepository _consumerRepository;
         private ProsumerRepository _prosumerRepository;
         private ImpiantoRepository _impiantoRepository;
+        private Dati_EconomiciRepository _dati_economiciRepository;
+        private Dati_ImpiantoRepository _dati_impiantoRepository;
         public DatabaseService(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -106,6 +108,25 @@ namespace Dashboard.Implementation
                 return _impiantoRepository;
             }
         }
+        public Dati_EconomiciRepository Dati_EconomiciRepository
+        {
+            get
+            {
+                if (_dati_economiciRepository == null)
+                    _dati_economiciRepository = new Dati_EconomiciRepository(_dbContext);
+                return _dati_economiciRepository;
+            }
+        }
+        public Dati_ImpiantoRepository Dati_ImpiantoRepository
+        {
+            get
+            {
+                if (_dati_impiantoRepository == null)
+                    _dati_impiantoRepository = new Dati_ImpiantoRepository(_dbContext);
+                return _dati_impiantoRepository;
+            }
+        }
+
 
         public void SaveChanges()
         {

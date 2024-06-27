@@ -19,6 +19,8 @@ namespace Dashboard.Database
         public DbSet<Consumer> Consumer { get; set; }
         public DbSet<Prosumer> Prosumer { get; set; }
         public DbSet<Impianto> Impianto { get; set; }
+        public DbSet<Dati_Impianto> Dati_Impianto {  get; set; }
+        public DbSet<Dati_Economici> Dati_Economici {  get; set; }
 
         // Eventuali altre DbSet per altre tabelle
 
@@ -35,6 +37,8 @@ namespace Dashboard.Database
             modelBuilder.Entity<Consumer>().HasKey(c => c.Consumer_Id);
             modelBuilder.Entity<Prosumer>().HasKey(p => p.Prosumer_Id);
             modelBuilder.Entity<Impianto>().HasKey(i  => i.Impianto_Id);
+            modelBuilder.Entity<Dati_Impianto>().HasKey(di => di.Dati_Impianto_Id);
+            modelBuilder.Entity<Dati_Economici>().HasKey(de => de.Dati_Economici_Id);
         }
     }
 }

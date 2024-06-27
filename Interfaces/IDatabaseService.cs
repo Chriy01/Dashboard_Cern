@@ -11,6 +11,8 @@ namespace Dashboard.Interfaces
         UtenteRepository UtenteRepository { get; }
         ConsumerRepository ConsumerRepository { get; }
         ProsumerRepository ProsumerRepository { get; }
+        Dati_EconomiciRepository Dati_EconomiciRepository { get; }
+        Dati_ImpiantoRepository Dati_ImpiantoRepository { get; }
     }
 
 }
