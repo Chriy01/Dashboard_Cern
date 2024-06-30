@@ -743,67 +743,70 @@ namespace Dashboard.Controllers
             }
 
             var impiantoInfoList = new List<ConsumerInfo>();
+            if (impiantoList != null)
+            { 
 
-            foreach (var item in impiantoList)
-            {
-                var _impianto = await _repo.ImpiantoRepository.GetById((int)item.Impianto_Id);
-
-                if (_impianto != null)
+                foreach (var item in impiantoList)
                 {
-                    var forma = "";
-                    var modalita = "";
-                    switch (_impianto.Forma_Utenza)
+                    var _impianto = await _repo.ImpiantoRepository.GetById((int)item.Impianto_Id);
+
+                    if (_impianto != null)
                     {
-                        case 0:
-                            forma = "Privato";
-                            break;
+                        var forma = "";
+                        var modalita = "";
+                        switch (_impianto.Forma_Utenza)
+                        {
+                            case 0:
+                                forma = "Privato";
+                                break;
 
-                        case 1:
-                            forma = "Azienda";
-                            break;
+                            case 1:
+                                forma = "Azienda";
+                                break;
 
-                        case 2:
-                            forma = "Pubblica";
-                            break;
+                            case 2:
+                                forma = "Pubblica";
+                                break;
+                        }
+                        switch (_impianto.Modalita_Inserimento)
+                        {
+
+                            case 1:
+                                modalita = "Consumo Annuale";
+                                break;
+
+                            case 2:
+                                modalita = "Consumo Mensile";
+                                break;
+
+                            case 3:
+                                modalita = "Curva Oraria";
+                                break;
+                        }
+
+                        var id = _impianto.Tipo_Utenza_Id;
+
+                        var tipo_utenza = new List<Tipo_Utenza>();
+
+
+                        tipo_utenza = await _repo.Tipo_UtenzaRepository.GetListTipoUtenza_ById(Convert.ToInt32(id));
+
+
+                        var consumerInfo = new ConsumerInfo
+                        {
+                            nome = _impianto.Descrizione,
+                            formautenza = forma,
+                            tipoutenza = tipo_utenza.First().Descrizione,
+                            modalita = modalita,
+                            nutenzecluster = _impianto.N_Utenze_Cluster.ToString(),
+                            btn = "<button type=\"button\" class=\"btn btn-sm mr-2 btn-info\" data-toggle=\"modal\" onclick=\"ModiImpianto(" + _impianto.Impianto_Id.ToString() + ")\"><i class=\"fas fa-pencil-alt\"></i></button>" + "<button type=\"button\" id=\"sa-confirm\" onclick=\"_SetIdImpianto('" + _impianto.Impianto_Id.ToString() + "')\" class=\"btn btn-sm btn-danger btncancel btncancelImpianto\"><i class=\"fas fa-trash-alt\"></i></button>" // Questo deve essere specificato secondo necessità
+
+                        };
+                        impiantoInfoList.Add(consumerInfo);
                     }
-                    switch (_impianto.Modalita_Inserimento)
-                    {
-
-                        case 1:
-                            modalita = "Consumo Annuale";
-                            break;
-
-                        case 2:
-                            modalita = "Consumo Mensile";
-                            break;
-
-                        case 3:
-                            modalita = "Curva Oraria";
-                            break;
-                    }
-
-                    var id = _impianto.Tipo_Utenza_Id;
-
-                    var tipo_utenza = new List<Tipo_Utenza>();
-
-
-                    tipo_utenza = await _repo.Tipo_UtenzaRepository.GetListTipoUtenza_ById(Convert.ToInt32(id));
-
-
-                    var consumerInfo = new ConsumerInfo
-                    {
-                        nome = _impianto.Descrizione,
-                        formautenza = forma,
-                        tipoutenza = tipo_utenza.First().Descrizione,
-                        modalita = modalita,
-                        nutenzecluster = _impianto.N_Utenze_Cluster.ToString(),
-                        btn = "<button type=\"button\" class=\"btn btn-sm mr-2 btn-info\" data-toggle=\"modal\" onclick=\"ModiImpianto(" + _impianto.Impianto_Id.ToString() + ")\"><i class=\"fas fa-pencil-alt\"></i></button>" + "<button type=\"button\" id=\"sa-confirm\" onclick=\"_SetIdImpianto('" + _impianto.Impianto_Id.ToString() + "')\" class=\"btn btn-sm btn-danger btncancel btncancelImpianto\"><i class=\"fas fa-trash-alt\"></i></button>" // Questo deve essere specificato secondo necessità
-
-                    };
-                    impiantoInfoList.Add(consumerInfo);
                 }
-            }
             //AddConsumer(Nome, Forma_Utenza, Tipo_Utenza, N_Utenze_Cluster, Modalita, Btn)
+            }
 
             return Json(impiantoInfoList);
 

@@ -170,7 +170,7 @@
 
                 </div>
 
-                <button style="float: right;" class="btn btn-success" onclick="sendSelectedGenerali()" id="btn_start"><i class="mdi mdi-play-circle"></i> Salva</button>
+                <button style="float: right;" class="btn btn-success" onclick="sendSelectedGenerali()" id="btn_start"><i class="mdi mdi-play-circle"></i>Salva</button>
 
             </div>
         </div>
@@ -365,7 +365,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" onclick="sendMonthsValue()"><i class="mdi"></i>Salva</button>
+                    <button class="btn btn-success" onclick="$('#centermodal').modal('hide')"><i class="mdi"></i>Conferma</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -385,69 +385,7 @@
     <!-- All Jquery -->
     <!-- ============================================================== -->
     <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-
-    <script>
-        function SwitchCosto() {
-            if ($('#check_mercato').is(":checked")) {
-                $('#parameters_col').show();
-            }else{
-                $('#parameters_col').hide();
-            }
-        }
-
-        function SwitchParametri() {
-            if ($('#check_parametri').is(":checked")) {
-                $('#insert_month').show();
-                $('#parametri_annuali').hide();
-            } else {
-                
-
-                $('#insert_month').hide();
-                $('#parametri_annuali').show();
-            }
-        }
-
-
-
-        function sendSelectedGenerali() {
-            var Zona_Mercato = document.getElementById("ZonaMercato").value;
-            var Tipo_Conf;
-            var nome_Comunita = $('#nome_com').val();
-            if ($('#customControlValidation2').is(':checked') == true) {
-                Tipo_Conf = 0;
-            } else {
-                Tipo_Conf = 1;
-            }
-            var formData = {
-                Nome_Comunita: nome_Comunita
-                ZonaMercato: Zona_Mercato,
-                Tipo_Conf: Tipo_Conf,
-                Inflazione: $('#Inflazione').val(),
-                Interesse: $('#Interesse').val(),
-                ZonaGeo: $('#ZonaGeo').val(),
-                Anno: $('#datepicker').val()
-            };
-
-            $.ajax({
-                type: 'POST',
-                url: 'DatiGenerali/SaveDatiGenerali',
-                data: formData,
-                success: function (data) {
-                    
-                },
-                error: function () {
-      
-                    // Gestisci gli errori qui, ad esempio mostrando un messaggio di errore all'utente
-                }
-            });
-        }
-
-        $(document).ready(function () {
-
-            $('#parameters_col').hide();
-            $('#insert_month').hide();
-        })
-    </script>
+    <script src="../../dist/js/Microd/dati_generali.js"></script>
 
 
 

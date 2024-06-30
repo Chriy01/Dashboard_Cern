@@ -44,7 +44,7 @@ namespace Dashboard.Implementation
             return true;
         }
 
-         async Task<bool> IBaseRepositable<Comunita>.Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             var comunita = await GetById(id);
             if (comunita != null)

@@ -23,7 +23,7 @@ namespace Dashboard.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly DatabaseService _repo;
         private readonly AppDbContext _dbContext;
-       
+        private Int32 ComunitaID;
 
         double[] ssiData = null;
         double[] sciData = null;
@@ -78,7 +78,12 @@ namespace Dashboard.Controllers
            
         }
 
-
+        [HttpGet]
+        public async Task<IActionResult> nuovaComunita()
+        {
+            HttpContext.Session.SetInt32("Comunita_Id", -1);
+            return Json(""); // o un'altra azione
+        }
 
 
         [HttpPost]
@@ -114,7 +119,7 @@ namespace Dashboard.Controllers
                         ZdM = _comunita.Zona_di_mercato,
                         Tipologia = _comunita.iscomunita ? "Comunità" : "",
                         ZG = _comunita.zona_geografica,
-                        Btn = "<button type=\"button\" class=\"btn btn-sm mr-2 btn-info\" data-toggle=\"modal\" onclick=\"Modi(" + _comunita.Comunita_Id.ToString() + ")\"><i class=\"fas fa-pencil-alt\"></i></button>" + "<button type=\"button\" id=\"sa-confirm\" onclick=\"SetId('"+ _comunita.Comunita_Id.ToString() + "')\" class=\"btn btn-sm btn-danger btncancel\"><i class=\"fas fa-trash-alt\"></i></button>" // Questo deve essere specificato secondo necessità
+                        Btn = "<button type=\"button\" class=\"btn btn-sm mr-2 btn-info\" data-toggle=\"modal\" onclick=\"editComunita(" + _comunita.Comunita_Id.ToString() + ")\"><i class=\"fas fa-pencil-alt\"></i></button>" + "<button type=\"button\" class=\"btn btn-sm mr-2 btn-info\" data-toggle=\"modal\" onclick=\"Modi(" + _comunita.Comunita_Id.ToString() + ")\"><i class=\"fas fa-solid fa-eye\"></i></button>" + "<button type=\"button\" id=\"sa-confirm\" onclick=\"_SetId('" + _comunita.Comunita_Id.ToString() + "')\" class=\"btn btn-sm btn-danger btncancel\"><i class=\"fas fa-trash-alt\"></i></button>" 
                     };
                     comunitaInfoList.Add(comunitaInfo);
                 }
@@ -125,7 +130,53 @@ namespace Dashboard.Controllers
 
 
         }
+        [HttpGet]
+        public async Task<JsonResult> SetIdComunita(Dictionary<string, string> formData)
+        {
+            var id = formData["id"].ToUpper();
+            if (id == "")
+            {
+                id = "-1";
+            }
 
+            ComunitaID = Convert.ToInt32(id);
+
+
+
+            return Json("");
+
+
+
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> DeleteComunita(Dictionary<string, string> formData)
+        {
+            var id = formData["id"].ToUpper();
+            if (id == "")
+            {
+                id = "-1";
+            }
+
+            ComunitaID = Convert.ToInt32(id);
+
+            await _repo.ComunitaRepository.Delete(Convert.ToInt32(ComunitaID));
+
+            _repo.SaveChanges();
+
+
+            return Json("");
+
+
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditComunita(Dictionary<string, string> formData)
+        {
+            var id = formData["id"].ToUpper();
+            HttpContext.Session.SetInt32("Comunita_Id", Convert.ToInt32(id));
+            return RedirectToAction("Index", "DatiGenerali", new { Id = id });
+        }
 
         [HttpGet]
         public async Task<IActionResult> ModificaComunita(Dictionary<string, string> formData)

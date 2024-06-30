@@ -1,5 +1,6 @@
 var Table_Comunita;
 var myData;
+var comunita_id;
 $(document).ready(function () {
     Table_Comunita = $('#grd_Comunita').DataTable({
         "language":
@@ -46,6 +47,10 @@ $(document).ready(function () {
 });
 $(document).ready(function () {
     // Effettua una chiamata AJAX al controller
+    _GetTableComunita();
+});
+
+function _GetTableComunita() {
     $.ajax({
         url: 'home/GetTable',
         type: 'GET',
@@ -57,13 +62,70 @@ $(document).ready(function () {
                 AddComunita(item.nome, item.anno, item.zdM, item.tipologia, item.zg, item.btn);
             });
             Table_Comunita.draw(true);
+
+            $(".btncancel").click(function () {
+                Swal.fire({
+                    title: "Sei sicuro di voler cancellare?",
+                    text: "Tutti i dati relativi alla comunità non saranno più recuperabili.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#1aa33f',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "Conferma",
+                    cancelButtonText: "Annulla"
+                }).then((result) => {
+                    if (result.value) {
+                        _DeleteComunita();
+                        Table_Comunita.draw(true);
+                        Swal.fire(
+                            "Cancellato",
+                            '',
+                            'success'
+                        )
+                    }
+                })
+            });
         },
         error: function (xhr, status, error) {
             console.log(error);
             console.error("Errore durante la chiamata AJAX: " + error);
         }
     });
-});
+}
+function _NuovaComunita() {
+    $.ajax({
+        url: 'home/nuovaComunita',
+        type: 'GET',
+       
+        success: function (item) {
+            window.location.href = '/DatiGenerali';
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+function _DeleteComunita() {
+    console.log(comunita_id);
+    var formData = {
+        id: comunita_id
+    };
+    $.ajax({
+        url: 'home/DeleteComunita',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+            Table_Comunita.clear().draw(true)
+            _GetTableComunita();
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+
 
 function AddComunita(Nome, Anno, ZdM, Tipologia,ZG, Btn) {
 
@@ -88,6 +150,43 @@ function AddComunita(Nome, Anno, ZdM, Tipologia,ZG, Btn) {
 
     Table_Comunita.rows.add(myData);
 
+}
+function _SetId(id) {
+    var formData = {
+        id: id
+    };
+    comunita_id = id;
+    $.ajax({
+        url: 'datiutenze/SetIdComunita',
+        type: 'GET',
+        data: formData,
+        success: function (item) {
+
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
+}
+function editComunita(Id) {
+
+    var formData = {
+        id: Id
+    };
+    $.ajax({
+        url: 'home/EditComunita',
+        type: 'GET',
+        data: formData,
+        success: function (data) {
+            // Itera sui dati e chiama la funzione JavaScript per ogni elemento
+            document.location.href = '/DatiGenerali?#';
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            console.error("Errore durante la chiamata AJAX: " + error);
+        }
+    });
 }
 
 function Modi(Id) {
