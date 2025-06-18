@@ -27,7 +27,7 @@ builder.Services.AddSession(options =>
 // Configurazione della connessione al database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySQL("Server=194.163.144.128;Database=CERN;user=ha;password=!Microdsrl_2023;"));
+    options.UseMySQL("Server=141.98.153.197;Database=CERN;user=root;password=root;"));
 
 var app = builder.Build();
 

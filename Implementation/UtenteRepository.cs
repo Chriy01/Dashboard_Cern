@@ -37,8 +37,8 @@ namespace Dashboard.Implementation
         {
             try
             {
-                password = ComputeMD5Hash(password);
-                var us = await _dbContext.Utente.Where(u => u.Username.ToUpper() == username && u.Password == password).SingleOrDefaultAsync();
+                string pwd = ComputeMD5Hash(password);
+                var us = await _dbContext.Utente.Where(u => u.Username.ToUpper() == username && u.Password == pwd).SingleOrDefaultAsync();
                 if (us != null)
                 {
        
