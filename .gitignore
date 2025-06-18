@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/CernSimulator/Original/__pycache__/A_Curve.cpython-311.pyc
+/CernSimulator/Original/__pycache__/A_Curve.cpython-38.pyc
+/CernSimulator/__pycache__/A_Curve.cpython-311.pyc
+/CernSimulator/test_service.py
+/.gitignore
